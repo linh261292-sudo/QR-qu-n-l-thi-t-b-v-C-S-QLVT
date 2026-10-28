@@ -1,0 +1,3769 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PXNL – Thiết bị & Vật tư</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0A2A4A; --navy-2:#0f3a63; --blue:#0083C7; --green:#00B050;
+  --bg:#f3f6fa; --panel:#ffffff; --ink:#0d1b2a; --muted:#5a6b7d; --line:#dbe3ec;
+  --soft:#e8f3fa; --warn:#b54708; --warn-bg:#fff4e0; --danger:#b42318; --danger-bg:#fde2e1; --ok:#0b6b35; --ok-bg:#ddf5e4;
+  --radius:14px; --shadow:0 1px 2px rgba(10,42,74,.06),0 8px 24px rgba(10,42,74,.07);
+  --f-display:"Sora",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:clamp(14px,.9vw + 8px,15px);line-height:1.5;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:var(--blue)}
+.hidden{display:none!important}
+.pulse{animation:pl 1.4s ease-in-out infinite}@keyframes pl{50%{box-shadow:0 0 0 6px rgba(0,131,199,.25)}}
+
+/* ---------- Admin layout ---------- */
+.app{display:grid;grid-template-columns:264px 1fr;min-height:100dvh}
+.side{background:var(--navy);color:#dfe9f3;display:flex;flex-direction:column;position:sticky;top:0;height:100dvh;overflow:hidden}
+.brand{padding:20px 18px 14px;border-bottom:1px solid rgba(255,255,255,.08)}
+.brand small{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#7fb8dc}
+.brand b{font-family:var(--f-display);font-size:17px;color:#fff;line-height:1.25;display:block;margin-top:4px}
+.side .search{margin:12px 14px 6px;position:relative}
+.side .search input{width:100%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:9px 12px;color:#fff;outline:none}
+.side .search input::placeholder{color:#8fa7bf}
+.side .search input:focus{border-color:var(--blue);background:rgba(255,255,255,.12)}
+.elist{flex:1;overflow:auto;padding:4px 8px 16px}
+.egroup{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#6f93b5;padding:14px 10px 4px}
+.eitem{display:flex;gap:10px;align-items:center;width:100%;text-align:left;background:none;border:0;border-radius:9px;padding:8px 10px;cursor:pointer;color:#cfdced}
+.eitem:hover{background:rgba(255,255,255,.06)}
+.eitem.active{background:var(--blue);color:#fff}
+.eitem .code{font-family:var(--f-display);font-weight:600;font-size:12px;min-width:54px}
+.eitem .nm{font-size:12.5px;line-height:1.3;opacity:.9;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.eitem .dot{width:7px;height:7px;border-radius:50%;background:#f79009;flex:none;margin-left:auto}
+.eitem .dot.ok{background:var(--green)}
+.side-foot{padding:12px 14px;border-top:1px solid rgba(255,255,255,.08);display:grid;gap:8px}
+
+.main{min-width:0;display:flex;flex-direction:column}
+.topbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:14px clamp(16px,2.4vw,32px);background:var(--panel);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.topbar h1{font-family:var(--f-display);font-size:clamp(16px,1.2vw + 8px,20px);margin:0 auto 0 0;color:var(--navy)}
+.tabs{display:flex;gap:4px;background:var(--soft);padding:4px;border-radius:11px}
+.tab{border:0;background:none;padding:7px 14px;border-radius:8px;cursor:pointer;font-weight:600;color:var(--navy);font-size:13.5px}
+.tab.on{background:#fff;box-shadow:0 1px 3px rgba(10,42,74,.15);color:var(--blue)}
+.content{padding:clamp(16px,2.4vw,32px);flex:1}
+
+.btn{display:inline-flex;gap:7px;align-items:center;justify-content:center;border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 14px;cursor:pointer;font-weight:600;font-size:13.5px;color:var(--navy);text-decoration:none;white-space:nowrap}
+.btn:hover{border-color:var(--blue);color:var(--blue)}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn.primary:hover{background:#006fa9;color:#fff}
+.btn.green{background:var(--green);border-color:var(--green);color:#fff}
+.btn.ghost{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);color:#fff}
+.btn.ghost:hover{background:rgba(255,255,255,.16);color:#fff}
+.btn.danger{color:var(--danger)}
+.btn.sm{padding:5px 10px;font-size:12.5px}
+
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:24px;align-items:start}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:clamp(16px,1.6vw,24px)}
+.card + .card{margin-top:18px}
+.card h2{font-family:var(--f-display);font-size:15px;margin:0 0 14px;color:var(--navy);display:flex;align-items:center;gap:8px}
+.card h2 .n{background:var(--soft);color:var(--blue);font-size:11px;border-radius:6px;padding:2px 7px}
+.fields{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px 16px}
+.f{display:flex;flex-direction:column;gap:5px;min-width:0}
+.f.full{grid-column:1/-1}
+.f label{font-size:12px;font-weight:600;color:var(--muted)}
+.f label em{font-style:normal;font-weight:400;color:#8798aa}
+.f input,.f select,.f textarea{border:1px solid var(--line);border-radius:9px;padding:8px 11px;background:#fbfdff;outline:none;width:100%;min-width:0}
+.f textarea{min-height:84px;resize:vertical;font-size:13.5px}
+.f input:focus,.f textarea:focus,.f select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,131,199,.14);background:#fff}
+.hint{font-size:12px;color:var(--muted);margin:6px 0 0}
+.rows{display:grid;gap:8px}
+.row{display:grid;grid-template-columns:1fr 1.4fr auto;gap:8px}
+.row.fault{grid-template-columns:1fr 1.4fr auto}
+.row input,.row textarea{border:1px solid var(--line);border-radius:9px;padding:7px 10px;background:#fbfdff;outline:none;min-width:0;width:100%}
+.row textarea{min-height:40px;resize:vertical}
+.x{border:0;background:none;cursor:pointer;color:#9aa9b8;font-size:18px;padding:0 6px}
+.x:hover{color:var(--danger)}
+
+.qrbox{position:sticky;top:84px;text-align:center}
+.qrbox .qr{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;display:inline-block}
+.qrbox .qr svg{display:block;width:220px;height:220px}
+.qrurl{font-size:11.5px;color:var(--muted);word-break:break-all;margin:10px 0 0;text-align:left;background:var(--bg);border-radius:8px;padding:8px 10px}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;border-radius:999px;padding:3px 10px}
+.pill.ok{background:var(--ok-bg);color:var(--ok)}
+.pill.warn{background:var(--warn-bg);color:var(--warn)}
+.pill.bad{background:var(--danger-bg);color:var(--danger)}
+.stack{display:grid;gap:8px;margin-top:14px}
+
+/* labels */
+.printbar{display:flex;flex-wrap:wrap;gap:12px;align-items:end;margin-bottom:18px}
+.checks{display:flex;flex-wrap:wrap;gap:6px}
+.chk{display:inline-flex;gap:6px;align-items:center;border:1px solid var(--line);background:#fff;border-radius:999px;padding:4px 11px;font-size:12.5px;cursor:pointer;user-select:none}
+.chk input{accent-color:var(--blue)}
+.sheet{display:flex;flex-wrap:wrap;gap:6mm;background:#fff;border:1px dashed var(--line);border-radius:12px;padding:8mm}
+.label{width:var(--lw);height:var(--lh);border:1.2px solid var(--navy);border-radius:3mm;overflow:hidden;display:grid;grid-template-rows:auto 1fr auto;background:#fff;color:var(--navy);break-inside:avoid;page-break-inside:avoid}
+.label .lt{background:var(--navy);color:#fff;font-family:var(--f-display);font-weight:700;font-size:calc(var(--lh)*.055);letter-spacing:.06em;padding:1.4mm 2.5mm;display:flex;justify-content:space-between;gap:2mm;white-space:nowrap;overflow:hidden}
+.label .lt span:last-child{color:#7fd3a0}
+.label .lb{display:grid;grid-template-columns:auto 1fr;gap:2.5mm;align-items:center;padding:2mm 2.5mm;min-height:0}
+.label .lb svg{height:calc(var(--lh)*.66);width:auto;display:block}
+.label .lc{font-family:var(--f-display);font-weight:800;font-size:calc(var(--lh)*.16);line-height:1;color:var(--blue)}
+.label .ln{font-size:calc(var(--lh)*.068);font-weight:600;line-height:1.25;margin-top:1.4mm;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical}
+.label .lf{background:var(--green);color:#fff;font-size:calc(var(--lh)*.052);font-weight:600;padding:1mm 2.5mm;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.vt-src{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.vt-src .msg{font-size:13px;color:var(--muted)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:16px 0}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.kpi b{display:block;font-family:var(--f-display);font-size:22px;color:var(--navy);font-variant-numeric:tabular-nums}
+.kpi span{font-size:12px;color:var(--muted)}
+.kpi.warn b{color:var(--warn)} .kpi.bad b{color:var(--danger)} .kpi.ok b{color:var(--ok)}
+.vt-filters{display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin-bottom:12px}
+.vt-filters .f{min-width:150px}
+.vt-filters .f.grow{flex:1;min-width:220px}
+.tblwrap{overflow:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel);max-height:70dvh}
+table.vt{border-collapse:collapse;width:100%;font-size:13px}
+table.vt th{position:sticky;top:0;background:var(--soft);color:var(--navy);text-align:left;padding:8px 10px;font-weight:600;white-space:nowrap;z-index:1}
+table.vt td{border-top:1px solid var(--line);padding:7px 10px;vertical-align:top}
+table.vt tr.click{cursor:pointer}
+table.vt tr.click:hover td{background:#f4f9fd}
+table.vt td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.mono{font-family:ui-monospace,Consolas,monospace;font-size:12.5px}
+.cls{display:inline-block;font-size:11px;font-weight:700;border-radius:6px;padding:1px 7px;color:#fff;background:#6b7a8c}
+.cls.A1{background:#b3261e}.cls.A2{background:#d9480f}.cls.A3{background:#0f8a6a}.cls.B{background:#0083c7}.cls.C{background:#6b7a8c}.cls.D{background:#c2185b}
+.stk{font-weight:700}.stk.ok{color:var(--ok)}.stk.low{color:var(--warn)}.stk.zero,.stk.none{color:var(--danger)}.stk.nocode{color:var(--muted);font-weight:500}
+.eqchip{display:inline-block;font-size:11px;font-weight:600;background:var(--soft);color:var(--blue);border-radius:6px;padding:1px 6px;margin:1px 2px 1px 0}
+.vt-empty{padding:28px;text-align:center;color:var(--muted)}
+.vtlist .it{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px solid #eef2f6;font-size:13.5px}
+.vtlist .it:last-child{border-bottom:0}
+.vtlist .it .nm{flex:1;min-width:0}
+.vtlist .it .nm small{display:block;color:var(--muted);font-size:12px}
+.vtlist .it .q{text-align:right;white-space:nowrap}
+.guide h3{font-family:var(--f-display);color:var(--navy);font-size:15px;margin:22px 0 8px}
+.guide p,.guide li{max-width:78ch}
+.guide ol,.guide ul{padding-left:20px}
+.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:14px 0}
+.flow div{background:var(--soft);border-radius:12px;padding:12px 14px;font-size:13px}
+.flow b{display:block;font-family:var(--f-display);color:var(--blue);font-size:12px;letter-spacing:.08em;margin-bottom:4px}
+table.t{border-collapse:collapse;width:100%;font-size:13px}
+table.t th,table.t td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+table.t th{background:var(--soft);color:var(--navy);font-weight:600}
+
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:var(--navy);color:#fff;padding:10px 18px;border-radius:10px;opacity:0;transition:.25s;z-index:50;font-size:13.5px;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%)}
+dialog{border:0;border-radius:16px;padding:0;max-width:min(760px,94vw);width:100%;box-shadow:0 30px 80px rgba(10,42,74,.35)}
+dialog::backdrop{background:rgba(10,42,74,.45)}
+.dlg{padding:22px}
+.dlg h2{font-family:var(--f-display);color:var(--navy);margin:0 0 6px;font-size:17px}
+.dlg textarea{width:100%;min-height:200px;border:1px solid var(--line);border-radius:10px;padding:10px;font-family:ui-monospace,Consolas,monospace;font-size:12px}
+.dlg .acts{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
+
+/* ---------- Hub (mobile view when scanned) ---------- */
+.hub{min-height:100dvh;background:var(--bg);position:relative;overflow-x:hidden}
+.hero{position:relative;color:#fff;padding:22px 18px 70px;overflow:hidden;background:var(--navy)}
+.hero::before{content:"";position:absolute;inset:-20%;background:
+  radial-gradient(40% 50% at 20% 30%,rgba(0,131,199,.55),transparent 70%),
+  radial-gradient(35% 45% at 85% 20%,rgba(0,176,80,.35),transparent 70%),
+  radial-gradient(50% 60% at 60% 110%,rgba(0,131,199,.35),transparent 70%);
+  animation:kb 18s ease-in-out infinite alternate}
+@keyframes kb{from{transform:scale(1) translate(0,0)}to{transform:scale(1.15) translate(-3%,2%)}}
+.hero>*{position:relative}
+.hero .org{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#9fd0ec;display:flex;justify-content:space-between;gap:8px}
+.hero .code{font-family:var(--f-display);font-weight:800;font-size:clamp(34px,9vw,52px);line-height:1;margin:18px 0 6px;letter-spacing:-.01em}
+.hero .name{font-size:clamp(16px,4.4vw,20px);font-weight:600;max-width:30ch;line-height:1.35}
+.hero .meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.hero .meta span{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:3px 10px;font-size:12px}
+.hubwrap{max-width:720px;margin:-48px auto 0;padding:0 14px 40px;position:relative}
+.tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.tile{background:#fff;border-radius:16px;padding:16px 14px;text-decoration:none;color:var(--navy);box-shadow:var(--shadow);border:1px solid var(--line);display:flex;flex-direction:column;gap:10px;min-height:112px;transition:transform .15s}
+.tile:active{transform:scale(.98)}
+.tile .ic{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:var(--soft);color:var(--blue)}
+.tile .ic svg{width:21px;height:21px}
+.tile b{font-family:var(--f-display);font-size:14.5px;line-height:1.25}
+.tile small{color:var(--muted);font-size:12px;margin-top:-6px}
+.tile.primary{background:var(--blue);color:#fff;border-color:var(--blue)}
+.tile.primary .ic{background:rgba(255,255,255,.18);color:#fff}
+.tile.primary small{color:#d7eefa}
+.tile.dis,.tile.dis.in{opacity:.45;pointer-events:none}
+.sec{background:#fff;border-radius:16px;border:1px solid var(--line);box-shadow:var(--shadow);margin-top:14px;padding:16px}
+.sec h3{font-family:var(--f-display);font-size:14px;color:var(--navy);margin:0 0 10px;display:flex;align-items:center;gap:8px}
+.kv{display:grid;grid-template-columns:minmax(110px,40%) 1fr;font-size:13.5px}
+.kv div{padding:7px 0;border-bottom:1px solid #eef2f6}
+.kv div:nth-child(odd){color:var(--muted)}
+.kv div:nth-child(even){font-weight:600}
+.doclink{display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid #eef2f6;text-decoration:none;color:var(--ink);font-size:13.5px}
+.doclink:last-child{border-bottom:0}
+.doclink .pdf{flex:none;font-size:10px;font-weight:700;color:#fff;background:#d92d20;border-radius:5px;padding:3px 5px}
+.doclink .arr{margin-left:auto;color:var(--blue)}
+details.fault{border-bottom:1px solid #eef2f6;padding:10px 0}
+details.fault:last-child{border-bottom:0}
+details.fault summary{cursor:pointer;font-weight:600;font-size:13.5px;list-style:none;display:flex;gap:8px}
+details.fault summary::before{content:"+";color:var(--blue);font-weight:700;width:12px;flex:none}
+details.fault[open] summary::before{content:"–"}
+details.fault p{margin:8px 0 0 20px;font-size:13.5px;color:#23364a;white-space:pre-line}
+.note{background:var(--warn-bg);border-left:3px solid #f79009;border-radius:8px;padding:10px 12px;font-size:13.5px;white-space:pre-line}
+.lockbox{display:grid;gap:10px}
+.lockbox input{border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:16px;width:100%;outline:none;background:#fbfdff}
+.lockbox input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,131,199,.15)}
+.lockbox .err{color:var(--danger);font-size:13px;min-height:18px}
+.tile .lk{position:absolute;top:12px;right:12px;font-size:11px;font-weight:700;background:var(--warn-bg);color:var(--warn);border-radius:999px;padding:2px 8px}
+.tile{position:relative}
+.dir{display:grid;gap:8px}
+.dir a{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;text-decoration:none;color:var(--ink)}
+.dir a b{font-family:var(--f-display);color:var(--blue);min-width:62px}
+.hubfoot{text-align:center;color:var(--muted);font-size:12px;margin-top:22px}
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s ease}
+.reveal.in{opacity:1;transform:none}
+.backbar{position:fixed;right:14px;bottom:14px;z-index:9}
+
+@media (prefers-reduced-motion:reduce){.hero::before{animation:none}.reveal{opacity:1;transform:none;transition:none}}
+@media (max-width:980px){.grid2{grid-template-columns:1fr}.qrbox{position:static}}
+@media (max-width:760px){
+  .app{grid-template-columns:1fr}
+  .side{position:static;height:auto;max-height:46dvh}
+  .topbar{position:static}
+  .row,.row.fault{grid-template-columns:1fr}
+}
+@media print{
+  @page{size:A4;margin:8mm}
+  body{background:#fff}
+  .side,.topbar,.printbar,.noprint,.toast,.backbar{display:none!important}
+  .app{display:block}
+  .content{padding:0}
+  .sheet{border:0;padding:0;border-radius:0}
+  .card{box-shadow:none;border:0;padding:0}
+  .label{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+
+<!-- ======= ADMIN ======= -->
+<div id="admin" class="app hidden">
+  <aside class="side">
+    <div class="brand"><small>NMNĐ Sông Hậu 1 · Hệ thống nhiên liệu</small><b>Quản lý thiết bị & vật tư</b></div>
+    <div class="search"><input id="q" type="search" placeholder="Tìm mã hoặc tên thiết bị…" aria-label="Tìm thiết bị"></div>
+    <nav class="elist" id="elist" aria-label="Danh sách thiết bị"></nav>
+    <div class="side-foot">
+      <button class="btn ghost" id="addEq">+ Thêm thiết bị</button>
+      <button class="btn ghost" id="pasteXls">Dán danh mục từ Excel</button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <h1 id="pageTitle">Thiết bị</h1>
+      <div class="tabs" role="tablist">
+        <button class="tab on" data-tab="edit">Thiết bị</button>
+        <button class="tab" data-tab="settings">Cài đặt chung</button>
+        <button class="tab" data-tab="labels">In tem QR</button>
+        <button class="tab" data-tab="vattu">Vật tư</button>
+        <button class="tab" data-tab="guide">Hướng dẫn</button>
+      </div>
+      <button class="btn green" id="exportHtml" title="Bản quản trị đầy đủ (có link tài liệu không mã hóa) – chỉ lưu nội bộ">Lưu bản quản trị</button>
+    </header>
+
+    <section class="content" id="tab-edit"></section>
+
+    <section class="content hidden" id="tab-settings">
+      <div class="card" style="max-width:980px">
+        <h2>Thông tin chung</h2>
+        <div class="fields">
+          <div class="f"><label>Tên đơn vị (in trên tem)</label><input data-s="plant"></div>
+          <div class="f"><label>Hệ thống</label><input data-s="system"></div>
+          <div class="f"><label>Dòng chân tem</label><input data-s="footer"></div>
+          <div class="f"><label>Mức sửa lỗi QR</label>
+            <select data-s="ecc"><option value="M">M – 15% (mã thưa, dễ quét xa)</option><option value="Q">Q – 25% (khuyên dùng hiện trường bụi)</option><option value="H">H – 30% (tem dễ trầy xước)</option></select></div>
+          <div class="f"><label>Đích QR khi chưa có trang hồ sơ</label>
+            <select data-s="qrMode"><option value="docs">Thư mục tài liệu của thiết bị (Google Drive / SharePoint)</option><option value="maximo">Tài sản trên Maximo theo KKS (thiếu KKS → sổ Google)</option><option value="sheet">Sổ theo dõi bất thường (Google)</option><option value="none">Không tạo QR</option></select></div>
+        </div>
+      </div>
+      <div class="card" style="max-width:980px">
+        <h2>Địa chỉ trang hồ sơ (đích của QR)</h2>
+        <div class="fields">
+          <div class="f full"><label>URL nơi đặt file HTML này <em>(phương án B – nếu có máy chủ web nội bộ / Azure / GitHub Pages)</em></label><input data-s="baseUrl" placeholder="https://…/hoso-thietbi.html"></div>
+        </div>
+        <p class="hint">QR của mỗi thiết bị ưu tiên dùng <b>“Link trang hồ sơ”</b> nhập riêng (VD trang Google Sites, chế độ lọc Google Sheets). Nếu để trống, QR sẽ là <code>URL ở trên + ?tb=MÃ</code> và mở ra trang hồ sơ tự động dựng từ file này.</p>
+      </div>
+      <div class="card" style="max-width:980px">
+        <h2>Link dùng chung cho mọi thiết bị <span class="n">tự điền nếu thiết bị chưa có link riêng</span></h2>
+        <div class="fields">
+          <div class="f full"><label>Thư mục gốc tài liệu (SharePoint / Drive) <em>– thiết bị chưa có link riêng sẽ tự dùng thư mục con trùng mã, VD …/3. Tài liệu KT/CSU01</em></label><input data-s="docRoot" placeholder="Dán link thư mục SharePoint"></div>
+          <div class="f full"><label>Sổ theo dõi bất thường (Google Sheets) <em>– trang hồ sơ đọc trực tiếp sổ này để hiện bất thường của từng thiết bị</em></label><input data-s="faultUrl" placeholder="https://docs.google.com/spreadsheets/d/…/edit#gid=…"></div>
+          <div class="f"><label>Địa chỉ CMMS Maximo</label><input data-s="maximoBase" placeholder="http://cmms…/maximo"></div>
+          <div class="f"><label>Site Maximo <em>(không bắt buộc)</em></label><input data-s="maximoSite" placeholder="VD: SH1"></div>
+          <div class="f"><label>Link báo lỗi riêng <em>(để trống → tạo SR mới trên Maximo)</em></label><input data-s="formUrl" placeholder="https://…"></div>
+          <div class="f"><label>Lịch sử BD <em>(để trống → Work Order Maximo theo KKS)</em></label><input data-s="histUrl"></div>
+          <div class="f"><label>Kế hoạch BD <em>(để trống → PM Maximo theo KKS)</em></label><input data-s="planUrl"></div>
+          <div class="f"><label>Thư mục tài liệu chung (Drive / SharePoint)</label><input data-s="docUrl"></div>
+          <div class="f"><label>Link Tra cứu vật tư bản online <em>(để trống → mở file trong thư mục QuanlyvattuNL)</em></label><input data-s="vtUrl" placeholder="https://…github.io/…"></div>
+          <div class="f"><label>Liên hệ trực kíp (SĐT / nội bộ)</label><input data-s="contact"></div>
+        </div>
+      </div>
+      <div class="card" style="max-width:980px">
+        <h2>Bảo mật tài liệu & trang công khai</h2>
+        <div class="fields">
+          <div class="f"><label>Mật khẩu xem tài liệu</label><input data-s="docPass" type="password" autocomplete="new-password" placeholder="Tối thiểu 6 ký tự"></div>
+          <div class="f"><label>Gợi ý / liên hệ cấp mật khẩu <em>(hiện cho người quét)</em></label><input data-s="passHint" placeholder="VD: Liên hệ trưởng kíp PXNL"></div>
+          <div class="f"><label>Ghi nhớ mật khẩu trên điện thoại</label>
+            <select data-s="passKeep"><option value="12">12 giờ (1 ca)</option><option value="session">Đến khi đóng trình duyệt</option><option value="168">7 ngày</option></select></div>
+        </div>
+        <p class="hint">Trang công khai hiện thông tin thiết bị, lưu ý an toàn, lỗi thường gặp và các bất thường từ sổ theo dõi. Riêng link tài liệu (thư mục SharePoint/Drive và từng file PDF) được <b>mã hóa AES-256</b> bằng mật khẩu này: không có mật khẩu thì không đọc được kể cả khi xem mã nguồn trang. Mật khẩu không được lưu trong file xuất ra.</p>
+        <div class="stack" style="grid-template-columns:repeat(auto-fit,minmax(200px,max-content))">
+          <button class="btn primary" id="exportPublic">Xuất trang công khai (index.html)</button>
+        </div>
+        <p class="hint">Sau khi đưa index.html lên máy chủ, dán địa chỉ trang vào ô “URL nơi đặt file HTML” ở trên. Mã QR sẽ thành <code>…/?tb=MÃ</code>. Đổi mật khẩu: nhập mật khẩu mới, xuất lại và tải đè file, tem QR giữ nguyên.</p>
+      </div>
+      <div class="card" style="max-width:980px">
+        <h2>Sao lưu dữ liệu</h2>
+        <p class="hint" style="margin-top:0">Dữ liệu tự lưu trong trình duyệt của máy này. Nên “Xuất file HTML” hoặc tải bản sao lưu JSON sau mỗi đợt cập nhật.</p>
+        <div class="stack" style="grid-template-columns:repeat(auto-fit,minmax(180px,max-content))">
+          <button class="btn" id="dlJson">Tải bản sao lưu (.json)</button>
+          <label class="btn">Khôi phục từ .json<input type="file" id="upJson" accept=".json,application/json" hidden></label>
+          <button class="btn danger" id="resetAll">Xóa dữ liệu trên máy này</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="content hidden" id="tab-labels">
+      <div class="printbar noprint">
+        <div class="f"><label>Cỡ tem</label>
+          <select id="lblSize"><option value="50x30">50 × 30 mm (tủ điện, động cơ)</option><option value="70x45" selected>70 × 45 mm (tiêu chuẩn)</option><option value="100x65">100 × 65 mm (máy lớn, nhìn xa)</option></select></div>
+        <button class="btn" id="selAll">Chọn tất cả</button>
+        <button class="btn" id="selNone">Bỏ chọn</button>
+        <button class="btn primary" id="doPrint">In tem (A4)</button>
+      </div>
+      <div class="checks noprint" id="lblChecks" style="margin-bottom:16px"></div>
+      <div class="sheet" id="sheet"></div>
+      <p class="hint noprint">Mẹo: in trên decal nhựa/PVC chống nước, cán màng mờ để không lóa đèn. Tem gắn ở độ cao 1,2–1,6 m, tránh vùng rung mạnh và bụi than trực tiếp. Luôn quét thử bằng 2 loại điện thoại trước khi dán.</p>
+    </section>
+
+    <section class="content hidden" id="tab-vattu">
+      <div class="card">
+        <div class="vt-src">
+          <div><h2 style="margin:0 0 4px">Nguồn dữ liệu vật tư</h2><div class="msg" id="vtMsg">Chưa kết nối thư mục vật tư.</div></div>
+          <div class="stack" style="grid-template-columns:repeat(auto-fit,minmax(150px,max-content));margin:0">
+            <button class="btn primary" id="vtDir">Kết nối thư mục vật tư</button>
+            <label class="btn">Chọn file Excel<input type="file" id="vtPick" accept=".xlsx" multiple hidden></label>
+            <a class="btn" id="vtFull" href="../QuanlyvattuNL/index.html" target="_blank" rel="noopener">Mở Tra cứu vật tư đầy đủ ↗</a>
+          </div>
+        </div>
+        <div class="vt-files hint" id="vtFiles"></div>
+      </div>
+      <div class="kpis" id="vtKpis"></div>
+      <div class="vt-filters">
+        <div class="f grow"><label>Tìm mã / tên / model / thông số</label><input id="vtQ" type="search" placeholder="VD: encoder, 35084122, SKF 22320…"></div>
+        <div class="f"><label>Phạm vi</label><select id="vtScope"><option value="fuel">Thiết bị hệ thống nhiên liệu</option><option value="all">Toàn bộ vật tư PXNL</option></select></div>
+        <div class="f"><label>Thiết bị</label><select id="vtEq"><option value="">Tất cả</option></select></div>
+        <div class="f"><label>Phân loại</label><select id="vtCls"><option value="">Tất cả</option><option>A1</option><option>A2</option><option>A3</option><option>B</option><option>C</option><option>D</option></select></div>
+        <div class="f"><label>Tồn kho</label><select id="vtStk"><option value="">Tất cả</option><option value="ok">Đủ tồn</option><option value="low">Dưới mức min</option><option value="zero">Tồn 0</option><option value="none">Không có trong kho</option><option value="nocode">Chưa có mã</option></select></div>
+      </div>
+      <div class="tblwrap"><table class="vt"><thead><tr><th>Mã VT</th><th>Vật tư / model</th><th>Hệ thống</th><th>Loại</th><th style="text-align:right">Tồn</th><th style="text-align:right">Min</th><th>ĐVT</th><th>Thiết bị</th></tr></thead><tbody id="vtBody"></tbody></table></div>
+      <p class="hint" id="vtMore"></p>
+    </section>
+
+    <section class="content hidden guide" id="tab-guide">
+      <div class="card" style="max-width:1000px">
+        <h2>Mô hình hoạt động</h2>
+        <div class="flow">
+          <div><b>1 · QUÉT</b>Kỹ thuật/vận hành quét tem QR dán tại thiết bị bằng camera điện thoại.</div>
+          <div><b>2 · XEM</b>Mở hồ sơ thiết bị: thông số, tài liệu PDF, lỗi thường gặp, khuyến cáo.</div>
+          <div><b>3 · GHI</b>Báo lỗi tạo SR trên Maximo; bất thường & cách xử lý ghi vào sổ theo dõi Google.</div>
+          <div><b>4 · KIỂM SOÁT</b>Trưởng kíp xem số bất thường chưa hoàn thành, WO/PM đến hạn trên Maximo.</div>
+        </div>
+        <h3>Nguồn dữ liệu đang dùng</h3>
+        <table class="t">
+          <tr><th style="width:26%">Nguồn</th><th>Vai trò trong hồ sơ QR</th><th style="width:28%">Điều kiện truy cập</th></tr>
+          <tr><td><b>Sổ theo dõi bất thường</b> (Google Sheets)</td><td>Trang hồ sơ đọc trực tiếp sổ, lọc theo từ khóa của thiết bị (cột “Hệ thống/thiết bị” và “KKS”) và hiện: mô tả, diễn biến, nguyên nhân, biện pháp khắc phục, tình trạng xử lý. Kíp cứ ghi sổ như hiện nay, không cần nhập lại.</td><td>Điện thoại có Internet; sổ chia sẻ “Bất kỳ ai có đường liên kết đều xem được”.</td></tr>
+          <tr><td><b>CMMS Maximo</b></td><td>Các ô Lịch sử BD (Work Order), Lịch BD định kỳ (PM), Yêu cầu đã báo (SR), Hồ sơ tài sản mở thẳng Maximo và lọc sẵn theo mã KKS. Ô “Báo lỗi bất thường” mở màn hình tạo SR mới.</td><td>Mạng nội bộ nhà máy (Wi-Fi/VPN) + tài khoản CMMS.</td></tr>
+          <tr><td><b>Tài liệu PDF</b></td><td>Link thư mục hoặc từng file PDF (Google Drive / SharePoint / máy chủ nội bộ). Nếu để trống, ô Tài liệu mở hồ sơ tài sản trên Maximo.</td><td>Theo quyền chia sẻ của thư mục.</td></tr>
+        </table>
+
+        <h3>Chọn đích cho mã QR</h3>
+        <table class="t">
+          <tr><th style="width:26%">Phương án</th><th>Cách làm</th><th style="width:30%">Khi nào dùng</th></tr>
+          <tr><td><b>A. Đặt file HTML này lên web nội bộ</b> <span class="pill ok">Đầy đủ nhất</span></td>
+              <td>Nhờ CNTT đặt file (sau khi “Xuất file HTML”) lên máy chủ web nội bộ cùng mạng với CMMS. Điền URL vào Cài đặt chung → QR tự thành <code>…/hoso.html?tb=CSU01</code>. Người quét thấy đủ: thông số, bất thường từ sổ, các nút Maximo.</td>
+              <td>Dùng lâu dài, cần cả Maximo lẫn sổ theo dõi.</td></tr>
+          <tr><td><b>B. Google Sites</b></td>
+              <td>Tạo Google Site → Chèn → Nhúng → dán mã HTML, mỗi thiết bị 1 trang. Copy URL trang vào “Link trang hồ sơ”.</td>
+              <td>Chưa có máy chủ nội bộ, muốn quét được cả khi dùng 4G.</td></tr>
+          <tr><td><b>C. Chế độ lọc của Google Sheets</b></td>
+              <td>Trong sổ theo dõi: Dữ liệu → Tạo chế độ xem có lọc, lọc cột “Hệ thống/thiết bị” = CSU01 → đặt tên → copy link trình duyệt (có <code>fvid=</code>) → dán vào “Link trang hồ sơ”.</td>
+              <td>Triển khai ngay trong ngày, chỉ cần xem lịch sử bất thường.</td></tr>
+        </table>
+        <p class="hint">Lưu ý bảo mật: sổ Google đang cho xem công khai theo link. Nếu chỉ muốn người trong nhà máy xem, đổi sang chia sẻ theo tài khoản; khi đó trang hồ sơ không tự đọc sổ được, chỉ còn nút mở sổ.</p>
+
+        <h3>Chuẩn hóa ghi sổ để lọc chính xác</h3>
+        <ol>
+          <li>Cột <b>KKS</b> ghi đủ mã thiết bị chính (VD: P0EAA01 cho CSU01). Đây là khóa nối giữa sổ, Maximo và tem QR.</li>
+          <li>Cột <b>Hệ thống/thiết bị</b> ghi thống nhất một kiểu: CSU01, BC61, SR41… (không lúc “CSU 1”, lúc “Máy bốc dỡ số 1”).</li>
+          <li>Cột <b>Tình trạng xử lý</b> dùng danh sách chọn cố định: Chưa hoàn thành / Đang xử lý / Chờ vật tư / Đã hoàn thành.</li>
+          <li>Luôn điền <b>Nguyên nhân</b> và <b>Biện pháp khắc phục</b> khi đóng bất thường. Đây là phần người quét QR cần nhất.</li>
+          <li>Bất thường lặp lại ≥ 2 lần → đưa vào mục “Lỗi thường gặp & cách xử lý” của thiết bị trong công cụ này.</li>
+        </ol>
+
+        <h3>Quy tắc vận hành hệ thống</h3>
+        <ul>
+          <li>Mã thiết bị dùng thống nhất trên tem QR, sổ theo dõi và Maximo (VD: CSU01 / KKS P0EAA01).</li>
+          <li>Sau mỗi phiếu công tác: đóng WO trên Maximo và cập nhật tình trạng xử lý trong sổ theo dõi.</li>
+          <li>Đầu ca: trưởng kíp rà các bất thường “Chưa hoàn thành” và WO/PM đến hạn trên Maximo.</li>
+          <li>Hàng quý: rà tem QR (bong, mờ), quét thử; rà khuyến cáo chưa đưa vào kế hoạch.</li>
+        </ul>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- ======= HUB (trang khi quét QR) ======= -->
+<div id="hub" class="hub hidden"></div>
+
+<dialog id="dlgVt"><div class="dlg" id="dlgVtBody"></div></dialog>
+<dialog id="dlgPaste"><div class="dlg">
+  <h2>Dán danh mục từ Excel</h2>
+  <p class="hint" style="margin-top:0">Trong sheet <b>DM_ThietBi</b>, bôi đen từ cột “Mã TB” đến “Link trang hồ sơ” (bỏ dòng tiêu đề), Ctrl+C rồi dán vào đây. Mã đã có sẽ được cập nhật, mã mới được thêm.</p>
+  <textarea id="pasteArea" placeholder="SU-01&#9;Máy bốc dỡ than từ tàu số 1&#9;Cảng than&#9;…"></textarea>
+  <div class="acts"><button class="btn" data-close>Hủy</button><button class="btn primary" id="doPaste">Nhập</button></div>
+</div></dialog>
+
+<div class="toast" id="toast"></div>
+
+<script id="seed" type="application/json">{"settings": {"plant": "NMNĐ Sông Hậu 1", "system": "Hệ thống nhiên liệu", "footer": "Quét để xem tài liệu · lịch sử lỗi · lịch BD", "ecc": "Q", "qrMode": "docs", "docRoot": "https://pvpgbvn.sharepoint.com/sites/PXNL/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FPXNL%2FShared%20Documents%2F3%2E%20T%C3%A0i%20li%E1%BB%87u%20KT&viewid=f23a6229%2D8fd6%2D4f94%2D948f%2De060d8a367c7&newTargetListUrl=%2Fsites%2FPXNL%2FShared%20Documents&viewpath=%2Fsites%2FPXNL%2FShared%20Documents%2FForms%2FAllItems%2Easpx", "baseUrl": "", "formUrl": "", "faultUrl": "https://docs.google.com/spreadsheets/d/1h1jJsz3CaLHuTBbJ3Zc5mSuFCWOTrQLq/edit#gid=1622354358", "maximoBase": "http://cmms.pvpgbsh.vn/maximo", "maximoSite": "", "histUrl": "", "planUrl": "", "docUrl": "", "contact": ""}, "equipment": [{"code": "CSU01", "name": "Máy bốc dỡ than CSU01", "area": "Cảng than", "kks": "P0EAA01", "match": "CSU01, CSU 01, P0EAA01", "maker": "", "model": "", "year": "", "owner": "", "hubUrl": "", "docUrl": "", "formUrl": "", "faultUrl": "", "histUrl": "", "planUrl": "", "warning": "Cô lập nguồn, khóa và treo biển (LOTO) theo điều kiện cô lập trong phiếu công tác trước khi vào khu vực gầu/xích gầu, cơ cấu nâng hoặc tủ biến tần.", "specs": [{"k": "Năng suất định mức", "v": ""}, {"k": "Công suất động cơ chính", "v": ""}, {"k": "Điện áp cấp", "v": ""}, {"k": "Hệ điều khiển / PLC", "v": ""}], "docs": [], "faults": []}, {"code": "CSU02", "name": "Máy bốc dỡ than CSU02", "area": "Cảng than", "kks": "P0EAA02", "match": "CSU02, CSU 02, P0EAA02", "maker": "", "model": "", "year": "", "owner": "", "hubUrl": "", "docUrl": "", "formUrl": "", "faultUrl": "", "histUrl": "", "planUrl": "", "warning": "Cô lập nguồn, khóa và treo biển (LOTO) theo điều kiện cô lập trong phiếu công tác trước khi vào khu vực gầu/xích gầu, cơ cấu nâng hoặc tủ biến tần.", "specs": [{"k": "Năng suất định mức", "v": ""}, {"k": "Công suất động cơ chính", "v": ""}, {"k": "Điện áp cấp", "v": ""}, {"k": "Hệ điều khiển / PLC", "v": ""}], "docs": [], "faults": []}, {"code": "SR41", "name": "Máy đánh - phá đống SR41", "area": "Kho than", "kks": "P0EAD41", "match": "SR41, SR 41, P0EAD41", "maker": "", "model": "", "year": "", "owner": "", "hubUrl": "", "docUrl": "", "formUrl": "", "faultUrl": "", "histUrl": "", "planUrl": "", "warning": "", "specs": [{"k": "Năng suất định mức", "v": ""}, {"k": "Công suất động cơ chính", "v": ""}, {"k": "Điện áp cấp", "v": ""}, {"k": "Hệ điều khiển / PLC", "v": ""}], "docs": [], "faults": []}, {"code": "SR42", "name": "Máy đánh - phá đống SR42", "area": "Kho than", "kks": "P0EAD42", "match": "SR42, SR 42, P0EAD42", "maker": "", "model": "", "year": "", "owner": "", "hubUrl": "", "docUrl": "", "formUrl": "", "faultUrl": "", "histUrl": "", "planUrl": "", "warning": "", "specs": [{"k": "Năng suất định mức", "v": ""}, {"k": "Công suất động cơ chính", "v": ""}, {"k": "Điện áp cấp", "v": ""}, {"k": "Hệ điều khiển / PLC", "v": ""}], "docs": [], "faults": []}, {"code": "BC11", "name": "Băng tải than BC11", "area": "Băng tải", "kks": "P0EAC11", "match": "BC11, BC 11, P0EAC11", "maker": "", "model": "", "year": "", "owner": "", "hubUrl": "", "docUrl": "", "formUrl": "", "faultUrl": "", "histUrl": "", "planUrl": "", "warning": "", "specs": [{"k": "Năng suất định mức", "v": ""}, {"k": "Công suất động cơ chính", "v": ""}, {"k": "Điện áp cấp", "v": ""}, {"k": "Hệ điều khiển / PLC", "v": ""}], "docs": [], "faults": []}, {"code": "BC12", "name": "Băng tải than BC12", "area": "Băng tải", "kks": "P0EAC12", "match": "BC12, BC 12, P0EAC12", "maker": "", "model": "", "year": "", "owner": "", "hubUrl": "", "docUrl": "", "formUrl": "", "faultUrl": "", "histUrl": "", "planUrl": "", "warning": "", "specs": [{"k": "Năng suất định mức", "v": ""}, {"k": "Công suất động cơ chính", "v": ""}, {"k": "Điện áp cấp", "v": ""}, {"k": "Hệ điều khiển / PLC", "v": ""}], "docs": [], "faults": []}, {"code": "BC21", "name": "Băng tải than BC21", "area": "Băng tải", "kks": "P0EAC21", "match": "BC21, BC 21, P0EAC21", "maker": "", "model": "", "year": "", "owner": "", "hubUrl": "", "docUrl": "", "formUrl": "", "faultUrl": "", "histUrl": "", "planUrl": "", "warning": "", "specs": [{"k": "Năng suất định mức", "v": ""}, {"k": "Công suất động cơ chính", "v": ""}, {"k": "Điện áp cấp", "v": ""}, {"k": "Hệ điều khiển / PLC", "v": ""}], "docs": [], "faults": []}, {"code": "BC22", "name": "Băng tải than BC22", "area": "Băng tải", "kks": "P0EAC22", "match": "BC22, BC 22, P0EAC22", "maker": "", "model": "", "year": "", "owner": "", "hubUrl": "", "docUrl": "", "formUrl": "", "faultUrl": "", "histUrl": "", "planUrl": "", "warning": "", "specs": [{"k": "Năng suất định mức", "v": ""}, {"k": "Công suất động cơ chính", "v": ""}, {"k": "Điện áp cấp", "v": ""}, {"k": "Hệ điều khiển / PLC", "v": ""}], "docs": [], "faults": []}, {"code": "BC31", "name": "Băng tải than BC31", "area": "Băng tải", "kks": "P0EAC31", "match": "BC31, BC 31, P0EAC31", "maker": "", "model": "", "year": "", "owner": "", "hubUrl": "", "docUrl": "", "formUrl": "", "faultUrl": "", "histUrl": "", "planUrl": "", "warning": "", "specs": [{"k": "Năng suất định mức", "v": ""}, {"k": "Công suất động cơ chính", "v": ""}, {"k": "Điện áp cấp", "v": ""}, {"k": "Hệ điều khiển / PLC", "v": ""}], "docs": [], "faults": []}, {"code": "BC41", "name": "Băng tải than BC41", "area": "Băng tải", "kks": "P0EAC41", "match": "BC41, BC 41, P0EAC41", "maker": "", "model": "", "year": "", "owner": "", "hubUrl": "", "docUrl": "", "formUrl": "", "faultUrl": "", "histUrl": "", "planUrl": "", "warning": "", "specs": [{"k": "Năng suất định mức", "v": ""}, {"k": "Công suất động cơ chính", "v": ""}, {"k": "Điện áp cấp", "v": ""}, {"k": "Hệ điều khiển / PLC", "v": ""}], "docs": [], "faults": []}, {"code": "BC42", "name": "Băng tải than BC42", "area": "Băng tải", "kks": "P0EAC42", "match": "BC42, BC 42, P0EAC42", "maker": "", "model": "", "year": "", "owner": "", "hubUrl": "", "docUrl": "", "formUrl": "", "faultUrl": "", "histUrl": "", "planUrl": "", "warning": "", "specs": [{"k": "Năng suất định mức", "v": ""}, {"k": "Công suất động cơ chính", "v": ""}, {"k": "Điện áp cấp", "v": ""}, {"k": "Hệ điều khiển / PLC", "v": ""}], "docs": [], "faults": []}, {"code": "BC51", "name": "Băng tải than BC51", "area": "Băng tải", "kks": "P0EAC51", "match": "BC51, BC 51, P0EAC51", "maker": "", "model": "", "year": "", "owner": "", "hubUrl": "", "docUrl": "", "formUrl": "", "faultUrl": "", "histUrl": "", "planUrl": "", "warning": "", "specs": [{"k": "Năng suất định mức", "v": ""}, {"k": "Công suất động cơ chính", "v": ""}, {"k": "Điện áp cấp", "v": ""}, {"k": "Hệ điều khiển / PLC", "v": ""}], "docs": [], "faults": []}, {"code": "BC61", "name": "Băng tải than BC61", "area": "Băng tải", "kks": "P0EAC61", "match": "BC61, BC 61, P0EAC61", "maker": "", "model": "", "year": "", "owner": "", "hubUrl": "", "docUrl": "", "formUrl": "", "faultUrl": "", "histUrl": "", "planUrl": "", "warning": "", "specs": [{"k": "Năng suất định mức", "v": ""}, {"k": "Công suất động cơ chính", "v": ""}, {"k": "Điện áp cấp", "v": ""}, {"k": "Hệ điều khiển / PLC", "v": ""}], "docs": [], "faults": []}, {"code": "BC62", "name": "Băng tải than BC62", "area": "Băng tải", "kks": "P0EAC62", "match": "BC62, BC 62, P0EAC62", "maker": "", "model": "", "year": "", "owner": "", "hubUrl": "", "docUrl": "", "formUrl": "", "faultUrl": "", "histUrl": "", "planUrl": "", "warning": "", "specs": [{"k": "Năng suất định mức", "v": ""}, {"k": "Công suất động cơ chính", "v": ""}, {"k": "Điện áp cấp", "v": ""}, {"k": "Hệ điều khiển / PLC", "v": ""}], "docs": [], "faults": []}, {"code": "BC71", "name": "Băng tải than BC71", "area": "Băng tải", "kks": "P0EAC71", "match": "BC71, BC 71, P0EAC71", "maker": "", "model": "", "year": "", "owner": "", "hubUrl": "", "docUrl": "", "formUrl": "", "faultUrl": "", "histUrl": "", "planUrl": "", "warning": "", "specs": [{"k": "Năng suất định mức", "v": ""}, {"k": "Công suất động cơ chính", "v": ""}, {"k": "Điện áp cấp", "v": ""}, {"k": "Hệ điều khiển / PLC", "v": ""}], "docs": [], "faults": []}, {"code": "BC72", "name": "Băng tải than BC72", "area": "Băng tải", "kks": "P0EAC72", "match": "BC72, BC 72, P0EAC72", "maker": "", "model": "", "year": "", "owner": "", "hubUrl": "", "docUrl": "", "formUrl": "", "faultUrl": "", "histUrl": "", "planUrl": "", "warning": "", "specs": [{"k": "Năng suất định mức", "v": ""}, {"k": "Công suất động cơ chính", "v": ""}, {"k": "Điện áp cấp", "v": ""}, {"k": "Hệ điều khiển / PLC", "v": ""}], "docs": [], "faults": []}, {"code": "BC81", "name": "Băng tải than BC81", "area": "Băng tải", "kks": "P0EAC81", "match": "BC81, BC 81, P0EAC81", "maker": "", "model": "", "year": "", "owner": "", "hubUrl": "", "docUrl": "", "formUrl": "", "faultUrl": "", "histUrl": "", "planUrl": "", "warning": "", "specs": [{"k": "Năng suất định mức", "v": ""}, {"k": "Công suất động cơ chính", "v": ""}, {"k": "Điện áp cấp", "v": ""}, {"k": "Hệ điều khiển / PLC", "v": ""}], "docs": [], "faults": []}, {"code": "BC82", "name": "Băng tải than BC82", "area": "Băng tải", "kks": "P0EAC82", "match": "BC82, BC 82, P0EAC82", "maker": "", "model": "", "year": "", "owner": "", "hubUrl": "", "docUrl": "", "formUrl": "", "faultUrl": "", "histUrl": "", "planUrl": "", "warning": "", "specs": [{"k": "Năng suất định mức", "v": ""}, {"k": "Công suất động cơ chính", "v": ""}, {"k": "Điện áp cấp", "v": ""}, {"k": "Hệ điều khiển / PLC", "v": ""}], "docs": [], "faults": []}, {"code": "TC81", "name": "Tripper car TC81", "area": "Băng tải", "kks": "P0EAD81", "match": "TC81, TC 81, P0EAD81, Tripper car 81", "maker": "", "model": "", "year": "", "owner": "", "hubUrl": "", "docUrl": "", "formUrl": "", "faultUrl": "", "histUrl": "", "planUrl": "", "warning": "", "specs": [{"k": "Năng suất định mức", "v": ""}, {"k": "Công suất động cơ chính", "v": ""}, {"k": "Điện áp cấp", "v": ""}, {"k": "Hệ điều khiển / PLC", "v": ""}], "docs": [], "faults": []}, {"code": "TC82", "name": "Tripper car TC82", "area": "Băng tải", "kks": "P0EAD82", "match": "TC82, TC 82, P0EAD82, Tripper car 82", "maker": "", "model": "", "year": "", "owner": "", "hubUrl": "", "docUrl": "", "formUrl": "", "faultUrl": "", "histUrl": "", "planUrl": "", "warning": "", "specs": [{"k": "Năng suất định mức", "v": ""}, {"k": "Công suất động cơ chính", "v": ""}, {"k": "Điện áp cấp", "v": ""}, {"k": "Hệ điều khiển / PLC", "v": ""}], "docs": [], "faults": []}], "savedAt": 0, "namesRev": 2}</script>
+<script>//---------------------------------------------------------------------
+//
+// QR Code Generator for JavaScript
+//
+// Copyright (c) 2009 Kazuhiko Arase
+//
+// URL: http://www.d-project.com/
+//
+// Licensed under the MIT license:
+//  http://www.opensource.org/licenses/mit-license.php
+//
+// The word 'QR Code' is registered trademark of
+// DENSO WAVE INCORPORATED
+//  http://www.denso-wave.com/qrcode/faqpatent-e.html
+//
+//---------------------------------------------------------------------
+
+var qrcode = function() {
+
+  //---------------------------------------------------------------------
+  // qrcode
+  //---------------------------------------------------------------------
+
+  /**
+   * qrcode
+   * @param typeNumber 1 to 40
+   * @param errorCorrectionLevel 'L','M','Q','H'
+   */
+  var qrcode = function(typeNumber, errorCorrectionLevel) {
+
+    var PAD0 = 0xEC;
+    var PAD1 = 0x11;
+
+    var _typeNumber = typeNumber;
+    var _errorCorrectionLevel = QRErrorCorrectionLevel[errorCorrectionLevel];
+    var _modules = null;
+    var _moduleCount = 0;
+    var _dataCache = null;
+    var _dataList = [];
+
+    var _this = {};
+
+    var makeImpl = function(test, maskPattern) {
+
+      _moduleCount = _typeNumber * 4 + 17;
+      _modules = function(moduleCount) {
+        var modules = new Array(moduleCount);
+        for (var row = 0; row < moduleCount; row += 1) {
+          modules[row] = new Array(moduleCount);
+          for (var col = 0; col < moduleCount; col += 1) {
+            modules[row][col] = null;
+          }
+        }
+        return modules;
+      }(_moduleCount);
+
+      setupPositionProbePattern(0, 0);
+      setupPositionProbePattern(_moduleCount - 7, 0);
+      setupPositionProbePattern(0, _moduleCount - 7);
+      setupPositionAdjustPattern();
+      setupTimingPattern();
+      setupTypeInfo(test, maskPattern);
+
+      if (_typeNumber >= 7) {
+        setupTypeNumber(test);
+      }
+
+      if (_dataCache == null) {
+        _dataCache = createData(_typeNumber, _errorCorrectionLevel, _dataList);
+      }
+
+      mapData(_dataCache, maskPattern);
+    };
+
+    var setupPositionProbePattern = function(row, col) {
+
+      for (var r = -1; r <= 7; r += 1) {
+
+        if (row + r <= -1 || _moduleCount <= row + r) continue;
+
+        for (var c = -1; c <= 7; c += 1) {
+
+          if (col + c <= -1 || _moduleCount <= col + c) continue;
+
+          if ( (0 <= r && r <= 6 && (c == 0 || c == 6) )
+              || (0 <= c && c <= 6 && (r == 0 || r == 6) )
+              || (2 <= r && r <= 4 && 2 <= c && c <= 4) ) {
+            _modules[row + r][col + c] = true;
+          } else {
+            _modules[row + r][col + c] = false;
+          }
+        }
+      }
+    };
+
+    var getBestMaskPattern = function() {
+
+      var minLostPoint = 0;
+      var pattern = 0;
+
+      for (var i = 0; i < 8; i += 1) {
+
+        makeImpl(true, i);
+
+        var lostPoint = QRUtil.getLostPoint(_this);
+
+        if (i == 0 || minLostPoint > lostPoint) {
+          minLostPoint = lostPoint;
+          pattern = i;
+        }
+      }
+
+      return pattern;
+    };
+
+    var setupTimingPattern = function() {
+
+      for (var r = 8; r < _moduleCount - 8; r += 1) {
+        if (_modules[r][6] != null) {
+          continue;
+        }
+        _modules[r][6] = (r % 2 == 0);
+      }
+
+      for (var c = 8; c < _moduleCount - 8; c += 1) {
+        if (_modules[6][c] != null) {
+          continue;
+        }
+        _modules[6][c] = (c % 2 == 0);
+      }
+    };
+
+    var setupPositionAdjustPattern = function() {
+
+      var pos = QRUtil.getPatternPosition(_typeNumber);
+
+      for (var i = 0; i < pos.length; i += 1) {
+
+        for (var j = 0; j < pos.length; j += 1) {
+
+          var row = pos[i];
+          var col = pos[j];
+
+          if (_modules[row][col] != null) {
+            continue;
+          }
+
+          for (var r = -2; r <= 2; r += 1) {
+
+            for (var c = -2; c <= 2; c += 1) {
+
+              if (r == -2 || r == 2 || c == -2 || c == 2
+                  || (r == 0 && c == 0) ) {
+                _modules[row + r][col + c] = true;
+              } else {
+                _modules[row + r][col + c] = false;
+              }
+            }
+          }
+        }
+      }
+    };
+
+    var setupTypeNumber = function(test) {
+
+      var bits = QRUtil.getBCHTypeNumber(_typeNumber);
+
+      for (var i = 0; i < 18; i += 1) {
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+        _modules[Math.floor(i / 3)][i % 3 + _moduleCount - 8 - 3] = mod;
+      }
+
+      for (var i = 0; i < 18; i += 1) {
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+        _modules[i % 3 + _moduleCount - 8 - 3][Math.floor(i / 3)] = mod;
+      }
+    };
+
+    var setupTypeInfo = function(test, maskPattern) {
+
+      var data = (_errorCorrectionLevel << 3) | maskPattern;
+      var bits = QRUtil.getBCHTypeInfo(data);
+
+      // vertical
+      for (var i = 0; i < 15; i += 1) {
+
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+
+        if (i < 6) {
+          _modules[i][8] = mod;
+        } else if (i < 8) {
+          _modules[i + 1][8] = mod;
+        } else {
+          _modules[_moduleCount - 15 + i][8] = mod;
+        }
+      }
+
+      // horizontal
+      for (var i = 0; i < 15; i += 1) {
+
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+
+        if (i < 8) {
+          _modules[8][_moduleCount - i - 1] = mod;
+        } else if (i < 9) {
+          _modules[8][15 - i - 1 + 1] = mod;
+        } else {
+          _modules[8][15 - i - 1] = mod;
+        }
+      }
+
+      // fixed module
+      _modules[_moduleCount - 8][8] = (!test);
+    };
+
+    var mapData = function(data, maskPattern) {
+
+      var inc = -1;
+      var row = _moduleCount - 1;
+      var bitIndex = 7;
+      var byteIndex = 0;
+      var maskFunc = QRUtil.getMaskFunction(maskPattern);
+
+      for (var col = _moduleCount - 1; col > 0; col -= 2) {
+
+        if (col == 6) col -= 1;
+
+        while (true) {
+
+          for (var c = 0; c < 2; c += 1) {
+
+            if (_modules[row][col - c] == null) {
+
+              var dark = false;
+
+              if (byteIndex < data.length) {
+                dark = ( ( (data[byteIndex] >>> bitIndex) & 1) == 1);
+              }
+
+              var mask = maskFunc(row, col - c);
+
+              if (mask) {
+                dark = !dark;
+              }
+
+              _modules[row][col - c] = dark;
+              bitIndex -= 1;
+
+              if (bitIndex == -1) {
+                byteIndex += 1;
+                bitIndex = 7;
+              }
+            }
+          }
+
+          row += inc;
+
+          if (row < 0 || _moduleCount <= row) {
+            row -= inc;
+            inc = -inc;
+            break;
+          }
+        }
+      }
+    };
+
+    var createBytes = function(buffer, rsBlocks) {
+
+      var offset = 0;
+
+      var maxDcCount = 0;
+      var maxEcCount = 0;
+
+      var dcdata = new Array(rsBlocks.length);
+      var ecdata = new Array(rsBlocks.length);
+
+      for (var r = 0; r < rsBlocks.length; r += 1) {
+
+        var dcCount = rsBlocks[r].dataCount;
+        var ecCount = rsBlocks[r].totalCount - dcCount;
+
+        maxDcCount = Math.max(maxDcCount, dcCount);
+        maxEcCount = Math.max(maxEcCount, ecCount);
+
+        dcdata[r] = new Array(dcCount);
+
+        for (var i = 0; i < dcdata[r].length; i += 1) {
+          dcdata[r][i] = 0xff & buffer.getBuffer()[i + offset];
+        }
+        offset += dcCount;
+
+        var rsPoly = QRUtil.getErrorCorrectPolynomial(ecCount);
+        var rawPoly = qrPolynomial(dcdata[r], rsPoly.getLength() - 1);
+
+        var modPoly = rawPoly.mod(rsPoly);
+        ecdata[r] = new Array(rsPoly.getLength() - 1);
+        for (var i = 0; i < ecdata[r].length; i += 1) {
+          var modIndex = i + modPoly.getLength() - ecdata[r].length;
+          ecdata[r][i] = (modIndex >= 0)? modPoly.getAt(modIndex) : 0;
+        }
+      }
+
+      var totalCodeCount = 0;
+      for (var i = 0; i < rsBlocks.length; i += 1) {
+        totalCodeCount += rsBlocks[i].totalCount;
+      }
+
+      var data = new Array(totalCodeCount);
+      var index = 0;
+
+      for (var i = 0; i < maxDcCount; i += 1) {
+        for (var r = 0; r < rsBlocks.length; r += 1) {
+          if (i < dcdata[r].length) {
+            data[index] = dcdata[r][i];
+            index += 1;
+          }
+        }
+      }
+
+      for (var i = 0; i < maxEcCount; i += 1) {
+        for (var r = 0; r < rsBlocks.length; r += 1) {
+          if (i < ecdata[r].length) {
+            data[index] = ecdata[r][i];
+            index += 1;
+          }
+        }
+      }
+
+      return data;
+    };
+
+    var createData = function(typeNumber, errorCorrectionLevel, dataList) {
+
+      var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, errorCorrectionLevel);
+
+      var buffer = qrBitBuffer();
+
+      for (var i = 0; i < dataList.length; i += 1) {
+        var data = dataList[i];
+        buffer.put(data.getMode(), 4);
+        buffer.put(data.getLength(), QRUtil.getLengthInBits(data.getMode(), typeNumber) );
+        data.write(buffer);
+      }
+
+      // calc num max data.
+      var totalDataCount = 0;
+      for (var i = 0; i < rsBlocks.length; i += 1) {
+        totalDataCount += rsBlocks[i].dataCount;
+      }
+
+      if (buffer.getLengthInBits() > totalDataCount * 8) {
+        throw 'code length overflow. ('
+          + buffer.getLengthInBits()
+          + '>'
+          + totalDataCount * 8
+          + ')';
+      }
+
+      // end code
+      if (buffer.getLengthInBits() + 4 <= totalDataCount * 8) {
+        buffer.put(0, 4);
+      }
+
+      // padding
+      while (buffer.getLengthInBits() % 8 != 0) {
+        buffer.putBit(false);
+      }
+
+      // padding
+      while (true) {
+
+        if (buffer.getLengthInBits() >= totalDataCount * 8) {
+          break;
+        }
+        buffer.put(PAD0, 8);
+
+        if (buffer.getLengthInBits() >= totalDataCount * 8) {
+          break;
+        }
+        buffer.put(PAD1, 8);
+      }
+
+      return createBytes(buffer, rsBlocks);
+    };
+
+    _this.addData = function(data, mode) {
+
+      mode = mode || 'Byte';
+
+      var newData = null;
+
+      switch(mode) {
+      case 'Numeric' :
+        newData = qrNumber(data);
+        break;
+      case 'Alphanumeric' :
+        newData = qrAlphaNum(data);
+        break;
+      case 'Byte' :
+        newData = qr8BitByte(data);
+        break;
+      case 'Kanji' :
+        newData = qrKanji(data);
+        break;
+      default :
+        throw 'mode:' + mode;
+      }
+
+      _dataList.push(newData);
+      _dataCache = null;
+    };
+
+    _this.isDark = function(row, col) {
+      if (row < 0 || _moduleCount <= row || col < 0 || _moduleCount <= col) {
+        throw row + ',' + col;
+      }
+      return _modules[row][col];
+    };
+
+    _this.getModuleCount = function() {
+      return _moduleCount;
+    };
+
+    _this.make = function() {
+      if (_typeNumber < 1) {
+        var typeNumber = 1;
+
+        for (; typeNumber < 40; typeNumber++) {
+          var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, _errorCorrectionLevel);
+          var buffer = qrBitBuffer();
+
+          for (var i = 0; i < _dataList.length; i++) {
+            var data = _dataList[i];
+            buffer.put(data.getMode(), 4);
+            buffer.put(data.getLength(), QRUtil.getLengthInBits(data.getMode(), typeNumber) );
+            data.write(buffer);
+          }
+
+          var totalDataCount = 0;
+          for (var i = 0; i < rsBlocks.length; i++) {
+            totalDataCount += rsBlocks[i].dataCount;
+          }
+
+          if (buffer.getLengthInBits() <= totalDataCount * 8) {
+            break;
+          }
+        }
+
+        _typeNumber = typeNumber;
+      }
+
+      makeImpl(false, getBestMaskPattern() );
+    };
+
+    _this.createTableTag = function(cellSize, margin) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var qrHtml = '';
+
+      qrHtml += '<table style="';
+      qrHtml += ' border-width: 0px; border-style: none;';
+      qrHtml += ' border-collapse: collapse;';
+      qrHtml += ' padding: 0px; margin: ' + margin + 'px;';
+      qrHtml += '">';
+      qrHtml += '<tbody>';
+
+      for (var r = 0; r < _this.getModuleCount(); r += 1) {
+
+        qrHtml += '<tr>';
+
+        for (var c = 0; c < _this.getModuleCount(); c += 1) {
+          qrHtml += '<td style="';
+          qrHtml += ' border-width: 0px; border-style: none;';
+          qrHtml += ' border-collapse: collapse;';
+          qrHtml += ' padding: 0px; margin: 0px;';
+          qrHtml += ' width: ' + cellSize + 'px;';
+          qrHtml += ' height: ' + cellSize + 'px;';
+          qrHtml += ' background-color: ';
+          qrHtml += _this.isDark(r, c)? '#000000' : '#ffffff';
+          qrHtml += ';';
+          qrHtml += '"/>';
+        }
+
+        qrHtml += '</tr>';
+      }
+
+      qrHtml += '</tbody>';
+      qrHtml += '</table>';
+
+      return qrHtml;
+    };
+
+    _this.createSvgTag = function(cellSize, margin, alt, title) {
+
+      var opts = {};
+      if (typeof arguments[0] == 'object') {
+        // Called by options.
+        opts = arguments[0];
+        // overwrite cellSize and margin.
+        cellSize = opts.cellSize;
+        margin = opts.margin;
+        alt = opts.alt;
+        title = opts.title;
+      }
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      // Compose alt property surrogate
+      alt = (typeof alt === 'string') ? {text: alt} : alt || {};
+      alt.text = alt.text || null;
+      alt.id = (alt.text) ? alt.id || 'qrcode-description' : null;
+
+      // Compose title property surrogate
+      title = (typeof title === 'string') ? {text: title} : title || {};
+      title.text = title.text || null;
+      title.id = (title.text) ? title.id || 'qrcode-title' : null;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var c, mc, r, mr, qrSvg='', rect;
+
+      rect = 'l' + cellSize + ',0 0,' + cellSize +
+        ' -' + cellSize + ',0 0,-' + cellSize + 'z ';
+
+      qrSvg += '<svg version="1.1" xmlns="http://www.w3.org/2000/svg"';
+      qrSvg += !opts.scalable ? ' width="' + size + 'px" height="' + size + 'px"' : '';
+      qrSvg += ' viewBox="0 0 ' + size + ' ' + size + '" ';
+      qrSvg += ' preserveAspectRatio="xMinYMin meet"';
+      qrSvg += (title.text || alt.text) ? ' role="img" aria-labelledby="' +
+          escapeXml([title.id, alt.id].join(' ').trim() ) + '"' : '';
+      qrSvg += '>';
+      qrSvg += (title.text) ? '<title id="' + escapeXml(title.id) + '">' +
+          escapeXml(title.text) + '</title>' : '';
+      qrSvg += (alt.text) ? '<description id="' + escapeXml(alt.id) + '">' +
+          escapeXml(alt.text) + '</description>' : '';
+      qrSvg += '<rect width="100%" height="100%" fill="white" cx="0" cy="0"/>';
+      qrSvg += '<path d="';
+
+      for (r = 0; r < _this.getModuleCount(); r += 1) {
+        mr = r * cellSize + margin;
+        for (c = 0; c < _this.getModuleCount(); c += 1) {
+          if (_this.isDark(r, c) ) {
+            mc = c*cellSize+margin;
+            qrSvg += 'M' + mc + ',' + mr + rect;
+          }
+        }
+      }
+
+      qrSvg += '" stroke="transparent" fill="black"/>';
+      qrSvg += '</svg>';
+
+      return qrSvg;
+    };
+
+    _this.createDataURL = function(cellSize, margin) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      return createDataURL(size, size, function(x, y) {
+        if (min <= x && x < max && min <= y && y < max) {
+          var c = Math.floor( (x - min) / cellSize);
+          var r = Math.floor( (y - min) / cellSize);
+          return _this.isDark(r, c)? 0 : 1;
+        } else {
+          return 1;
+        }
+      } );
+    };
+
+    _this.createImgTag = function(cellSize, margin, alt) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+
+      var img = '';
+      img += '<img';
+      img += '\u0020src="';
+      img += _this.createDataURL(cellSize, margin);
+      img += '"';
+      img += '\u0020width="';
+      img += size;
+      img += '"';
+      img += '\u0020height="';
+      img += size;
+      img += '"';
+      if (alt) {
+        img += '\u0020alt="';
+        img += escapeXml(alt);
+        img += '"';
+      }
+      img += '/>';
+
+      return img;
+    };
+
+    var escapeXml = function(s) {
+      var escaped = '';
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charAt(i);
+        switch(c) {
+        case '<': escaped += '&lt;'; break;
+        case '>': escaped += '&gt;'; break;
+        case '&': escaped += '&amp;'; break;
+        case '"': escaped += '&quot;'; break;
+        default : escaped += c; break;
+        }
+      }
+      return escaped;
+    };
+
+    var _createHalfASCII = function(margin) {
+      var cellSize = 1;
+      margin = (typeof margin == 'undefined')? cellSize * 2 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      var y, x, r1, r2, p;
+
+      var blocks = {
+        '██': '█',
+        '█ ': '▀',
+        ' █': '▄',
+        '  ': ' '
+      };
+
+      var blocksLastLineNoMargin = {
+        '██': '▀',
+        '█ ': '▀',
+        ' █': ' ',
+        '  ': ' '
+      };
+
+      var ascii = '';
+      for (y = 0; y < size; y += 2) {
+        r1 = Math.floor((y - min) / cellSize);
+        r2 = Math.floor((y + 1 - min) / cellSize);
+        for (x = 0; x < size; x += 1) {
+          p = '█';
+
+          if (min <= x && x < max && min <= y && y < max && _this.isDark(r1, Math.floor((x - min) / cellSize))) {
+            p = ' ';
+          }
+
+          if (min <= x && x < max && min <= y+1 && y+1 < max && _this.isDark(r2, Math.floor((x - min) / cellSize))) {
+            p += ' ';
+          }
+          else {
+            p += '█';
+          }
+
+          // Output 2 characters per pixel, to create full square. 1 character per pixels gives only half width of square.
+          ascii += (margin < 1 && y+1 >= max) ? blocksLastLineNoMargin[p] : blocks[p];
+        }
+
+        ascii += '\n';
+      }
+
+      if (size % 2 && margin > 0) {
+        return ascii.substring(0, ascii.length - size - 1) + Array(size+1).join('▀');
+      }
+
+      return ascii.substring(0, ascii.length-1);
+    };
+
+    _this.createASCII = function(cellSize, margin) {
+      cellSize = cellSize || 1;
+
+      if (cellSize < 2) {
+        return _createHalfASCII(margin);
+      }
+
+      cellSize -= 1;
+      margin = (typeof margin == 'undefined')? cellSize * 2 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      var y, x, r, p;
+
+      var white = Array(cellSize+1).join('██');
+      var black = Array(cellSize+1).join('  ');
+
+      var ascii = '';
+      var line = '';
+      for (y = 0; y < size; y += 1) {
+        r = Math.floor( (y - min) / cellSize);
+        line = '';
+        for (x = 0; x < size; x += 1) {
+          p = 1;
+
+          if (min <= x && x < max && min <= y && y < max && _this.isDark(r, Math.floor((x - min) / cellSize))) {
+            p = 0;
+          }
+
+          // Output 2 characters per pixel, to create full square. 1 character per pixels gives only half width of square.
+          line += p ? white : black;
+        }
+
+        for (r = 0; r < cellSize; r += 1) {
+          ascii += line + '\n';
+        }
+      }
+
+      return ascii.substring(0, ascii.length-1);
+    };
+
+    _this.renderTo2dContext = function(context, cellSize) {
+      cellSize = cellSize || 2;
+      var length = _this.getModuleCount();
+      for (var row = 0; row < length; row++) {
+        for (var col = 0; col < length; col++) {
+          context.fillStyle = _this.isDark(row, col) ? 'black' : 'white';
+          context.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
+        }
+      }
+    }
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrcode.stringToBytes
+  //---------------------------------------------------------------------
+
+  qrcode.stringToBytesFuncs = {
+    'default' : function(s) {
+      var bytes = [];
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charCodeAt(i);
+        bytes.push(c & 0xff);
+      }
+      return bytes;
+    }
+  };
+
+  qrcode.stringToBytes = qrcode.stringToBytesFuncs['default'];
+
+  //---------------------------------------------------------------------
+  // qrcode.createStringToBytes
+  //---------------------------------------------------------------------
+
+  /**
+   * @param unicodeData base64 string of byte array.
+   * [16bit Unicode],[16bit Bytes], ...
+   * @param numChars
+   */
+  qrcode.createStringToBytes = function(unicodeData, numChars) {
+
+    // create conversion map.
+
+    var unicodeMap = function() {
+
+      var bin = base64DecodeInputStream(unicodeData);
+      var read = function() {
+        var b = bin.read();
+        if (b == -1) throw 'eof';
+        return b;
+      };
+
+      var count = 0;
+      var unicodeMap = {};
+      while (true) {
+        var b0 = bin.read();
+        if (b0 == -1) break;
+        var b1 = read();
+        var b2 = read();
+        var b3 = read();
+        var k = String.fromCharCode( (b0 << 8) | b1);
+        var v = (b2 << 8) | b3;
+        unicodeMap[k] = v;
+        count += 1;
+      }
+      if (count != numChars) {
+        throw count + ' != ' + numChars;
+      }
+
+      return unicodeMap;
+    }();
+
+    var unknownChar = '?'.charCodeAt(0);
+
+    return function(s) {
+      var bytes = [];
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charCodeAt(i);
+        if (c < 128) {
+          bytes.push(c);
+        } else {
+          var b = unicodeMap[s.charAt(i)];
+          if (typeof b == 'number') {
+            if ( (b & 0xff) == b) {
+              // 1byte
+              bytes.push(b);
+            } else {
+              // 2bytes
+              bytes.push(b >>> 8);
+              bytes.push(b & 0xff);
+            }
+          } else {
+            bytes.push(unknownChar);
+          }
+        }
+      }
+      return bytes;
+    };
+  };
+
+  //---------------------------------------------------------------------
+  // QRMode
+  //---------------------------------------------------------------------
+
+  var QRMode = {
+    MODE_NUMBER :    1 << 0,
+    MODE_ALPHA_NUM : 1 << 1,
+    MODE_8BIT_BYTE : 1 << 2,
+    MODE_KANJI :     1 << 3
+  };
+
+  //---------------------------------------------------------------------
+  // QRErrorCorrectionLevel
+  //---------------------------------------------------------------------
+
+  var QRErrorCorrectionLevel = {
+    L : 1,
+    M : 0,
+    Q : 3,
+    H : 2
+  };
+
+  //---------------------------------------------------------------------
+  // QRMaskPattern
+  //---------------------------------------------------------------------
+
+  var QRMaskPattern = {
+    PATTERN000 : 0,
+    PATTERN001 : 1,
+    PATTERN010 : 2,
+    PATTERN011 : 3,
+    PATTERN100 : 4,
+    PATTERN101 : 5,
+    PATTERN110 : 6,
+    PATTERN111 : 7
+  };
+
+  //---------------------------------------------------------------------
+  // QRUtil
+  //---------------------------------------------------------------------
+
+  var QRUtil = function() {
+
+    var PATTERN_POSITION_TABLE = [
+      [],
+      [6, 18],
+      [6, 22],
+      [6, 26],
+      [6, 30],
+      [6, 34],
+      [6, 22, 38],
+      [6, 24, 42],
+      [6, 26, 46],
+      [6, 28, 50],
+      [6, 30, 54],
+      [6, 32, 58],
+      [6, 34, 62],
+      [6, 26, 46, 66],
+      [6, 26, 48, 70],
+      [6, 26, 50, 74],
+      [6, 30, 54, 78],
+      [6, 30, 56, 82],
+      [6, 30, 58, 86],
+      [6, 34, 62, 90],
+      [6, 28, 50, 72, 94],
+      [6, 26, 50, 74, 98],
+      [6, 30, 54, 78, 102],
+      [6, 28, 54, 80, 106],
+      [6, 32, 58, 84, 110],
+      [6, 30, 58, 86, 114],
+      [6, 34, 62, 90, 118],
+      [6, 26, 50, 74, 98, 122],
+      [6, 30, 54, 78, 102, 126],
+      [6, 26, 52, 78, 104, 130],
+      [6, 30, 56, 82, 108, 134],
+      [6, 34, 60, 86, 112, 138],
+      [6, 30, 58, 86, 114, 142],
+      [6, 34, 62, 90, 118, 146],
+      [6, 30, 54, 78, 102, 126, 150],
+      [6, 24, 50, 76, 102, 128, 154],
+      [6, 28, 54, 80, 106, 132, 158],
+      [6, 32, 58, 84, 110, 136, 162],
+      [6, 26, 54, 82, 110, 138, 166],
+      [6, 30, 58, 86, 114, 142, 170]
+    ];
+    var G15 = (1 << 10) | (1 << 8) | (1 << 5) | (1 << 4) | (1 << 2) | (1 << 1) | (1 << 0);
+    var G18 = (1 << 12) | (1 << 11) | (1 << 10) | (1 << 9) | (1 << 8) | (1 << 5) | (1 << 2) | (1 << 0);
+    var G15_MASK = (1 << 14) | (1 << 12) | (1 << 10) | (1 << 4) | (1 << 1);
+
+    var _this = {};
+
+    var getBCHDigit = function(data) {
+      var digit = 0;
+      while (data != 0) {
+        digit += 1;
+        data >>>= 1;
+      }
+      return digit;
+    };
+
+    _this.getBCHTypeInfo = function(data) {
+      var d = data << 10;
+      while (getBCHDigit(d) - getBCHDigit(G15) >= 0) {
+        d ^= (G15 << (getBCHDigit(d) - getBCHDigit(G15) ) );
+      }
+      return ( (data << 10) | d) ^ G15_MASK;
+    };
+
+    _this.getBCHTypeNumber = function(data) {
+      var d = data << 12;
+      while (getBCHDigit(d) - getBCHDigit(G18) >= 0) {
+        d ^= (G18 << (getBCHDigit(d) - getBCHDigit(G18) ) );
+      }
+      return (data << 12) | d;
+    };
+
+    _this.getPatternPosition = function(typeNumber) {
+      return PATTERN_POSITION_TABLE[typeNumber - 1];
+    };
+
+    _this.getMaskFunction = function(maskPattern) {
+
+      switch (maskPattern) {
+
+      case QRMaskPattern.PATTERN000 :
+        return function(i, j) { return (i + j) % 2 == 0; };
+      case QRMaskPattern.PATTERN001 :
+        return function(i, j) { return i % 2 == 0; };
+      case QRMaskPattern.PATTERN010 :
+        return function(i, j) { return j % 3 == 0; };
+      case QRMaskPattern.PATTERN011 :
+        return function(i, j) { return (i + j) % 3 == 0; };
+      case QRMaskPattern.PATTERN100 :
+        return function(i, j) { return (Math.floor(i / 2) + Math.floor(j / 3) ) % 2 == 0; };
+      case QRMaskPattern.PATTERN101 :
+        return function(i, j) { return (i * j) % 2 + (i * j) % 3 == 0; };
+      case QRMaskPattern.PATTERN110 :
+        return function(i, j) { return ( (i * j) % 2 + (i * j) % 3) % 2 == 0; };
+      case QRMaskPattern.PATTERN111 :
+        return function(i, j) { return ( (i * j) % 3 + (i + j) % 2) % 2 == 0; };
+
+      default :
+        throw 'bad maskPattern:' + maskPattern;
+      }
+    };
+
+    _this.getErrorCorrectPolynomial = function(errorCorrectLength) {
+      var a = qrPolynomial([1], 0);
+      for (var i = 0; i < errorCorrectLength; i += 1) {
+        a = a.multiply(qrPolynomial([1, QRMath.gexp(i)], 0) );
+      }
+      return a;
+    };
+
+    _this.getLengthInBits = function(mode, type) {
+
+      if (1 <= type && type < 10) {
+
+        // 1 - 9
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 10;
+        case QRMode.MODE_ALPHA_NUM : return 9;
+        case QRMode.MODE_8BIT_BYTE : return 8;
+        case QRMode.MODE_KANJI     : return 8;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else if (type < 27) {
+
+        // 10 - 26
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 12;
+        case QRMode.MODE_ALPHA_NUM : return 11;
+        case QRMode.MODE_8BIT_BYTE : return 16;
+        case QRMode.MODE_KANJI     : return 10;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else if (type < 41) {
+
+        // 27 - 40
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 14;
+        case QRMode.MODE_ALPHA_NUM : return 13;
+        case QRMode.MODE_8BIT_BYTE : return 16;
+        case QRMode.MODE_KANJI     : return 12;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else {
+        throw 'type:' + type;
+      }
+    };
+
+    _this.getLostPoint = function(qrcode) {
+
+      var moduleCount = qrcode.getModuleCount();
+
+      var lostPoint = 0;
+
+      // LEVEL1
+
+      for (var row = 0; row < moduleCount; row += 1) {
+        for (var col = 0; col < moduleCount; col += 1) {
+
+          var sameCount = 0;
+          var dark = qrcode.isDark(row, col);
+
+          for (var r = -1; r <= 1; r += 1) {
+
+            if (row + r < 0 || moduleCount <= row + r) {
+              continue;
+            }
+
+            for (var c = -1; c <= 1; c += 1) {
+
+              if (col + c < 0 || moduleCount <= col + c) {
+                continue;
+              }
+
+              if (r == 0 && c == 0) {
+                continue;
+              }
+
+              if (dark == qrcode.isDark(row + r, col + c) ) {
+                sameCount += 1;
+              }
+            }
+          }
+
+          if (sameCount > 5) {
+            lostPoint += (3 + sameCount - 5);
+          }
+        }
+      };
+
+      // LEVEL2
+
+      for (var row = 0; row < moduleCount - 1; row += 1) {
+        for (var col = 0; col < moduleCount - 1; col += 1) {
+          var count = 0;
+          if (qrcode.isDark(row, col) ) count += 1;
+          if (qrcode.isDark(row + 1, col) ) count += 1;
+          if (qrcode.isDark(row, col + 1) ) count += 1;
+          if (qrcode.isDark(row + 1, col + 1) ) count += 1;
+          if (count == 0 || count == 4) {
+            lostPoint += 3;
+          }
+        }
+      }
+
+      // LEVEL3
+
+      for (var row = 0; row < moduleCount; row += 1) {
+        for (var col = 0; col < moduleCount - 6; col += 1) {
+          if (qrcode.isDark(row, col)
+              && !qrcode.isDark(row, col + 1)
+              &&  qrcode.isDark(row, col + 2)
+              &&  qrcode.isDark(row, col + 3)
+              &&  qrcode.isDark(row, col + 4)
+              && !qrcode.isDark(row, col + 5)
+              &&  qrcode.isDark(row, col + 6) ) {
+            lostPoint += 40;
+          }
+        }
+      }
+
+      for (var col = 0; col < moduleCount; col += 1) {
+        for (var row = 0; row < moduleCount - 6; row += 1) {
+          if (qrcode.isDark(row, col)
+              && !qrcode.isDark(row + 1, col)
+              &&  qrcode.isDark(row + 2, col)
+              &&  qrcode.isDark(row + 3, col)
+              &&  qrcode.isDark(row + 4, col)
+              && !qrcode.isDark(row + 5, col)
+              &&  qrcode.isDark(row + 6, col) ) {
+            lostPoint += 40;
+          }
+        }
+      }
+
+      // LEVEL4
+
+      var darkCount = 0;
+
+      for (var col = 0; col < moduleCount; col += 1) {
+        for (var row = 0; row < moduleCount; row += 1) {
+          if (qrcode.isDark(row, col) ) {
+            darkCount += 1;
+          }
+        }
+      }
+
+      var ratio = Math.abs(100 * darkCount / moduleCount / moduleCount - 50) / 5;
+      lostPoint += ratio * 10;
+
+      return lostPoint;
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // QRMath
+  //---------------------------------------------------------------------
+
+  var QRMath = function() {
+
+    var EXP_TABLE = new Array(256);
+    var LOG_TABLE = new Array(256);
+
+    // initialize tables
+    for (var i = 0; i < 8; i += 1) {
+      EXP_TABLE[i] = 1 << i;
+    }
+    for (var i = 8; i < 256; i += 1) {
+      EXP_TABLE[i] = EXP_TABLE[i - 4]
+        ^ EXP_TABLE[i - 5]
+        ^ EXP_TABLE[i - 6]
+        ^ EXP_TABLE[i - 8];
+    }
+    for (var i = 0; i < 255; i += 1) {
+      LOG_TABLE[EXP_TABLE[i] ] = i;
+    }
+
+    var _this = {};
+
+    _this.glog = function(n) {
+
+      if (n < 1) {
+        throw 'glog(' + n + ')';
+      }
+
+      return LOG_TABLE[n];
+    };
+
+    _this.gexp = function(n) {
+
+      while (n < 0) {
+        n += 255;
+      }
+
+      while (n >= 256) {
+        n -= 255;
+      }
+
+      return EXP_TABLE[n];
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // qrPolynomial
+  //---------------------------------------------------------------------
+
+  function qrPolynomial(num, shift) {
+
+    if (typeof num.length == 'undefined') {
+      throw num.length + '/' + shift;
+    }
+
+    var _num = function() {
+      var offset = 0;
+      while (offset < num.length && num[offset] == 0) {
+        offset += 1;
+      }
+      var _num = new Array(num.length - offset + shift);
+      for (var i = 0; i < num.length - offset; i += 1) {
+        _num[i] = num[i + offset];
+      }
+      return _num;
+    }();
+
+    var _this = {};
+
+    _this.getAt = function(index) {
+      return _num[index];
+    };
+
+    _this.getLength = function() {
+      return _num.length;
+    };
+
+    _this.multiply = function(e) {
+
+      var num = new Array(_this.getLength() + e.getLength() - 1);
+
+      for (var i = 0; i < _this.getLength(); i += 1) {
+        for (var j = 0; j < e.getLength(); j += 1) {
+          num[i + j] ^= QRMath.gexp(QRMath.glog(_this.getAt(i) ) + QRMath.glog(e.getAt(j) ) );
+        }
+      }
+
+      return qrPolynomial(num, 0);
+    };
+
+    _this.mod = function(e) {
+
+      if (_this.getLength() - e.getLength() < 0) {
+        return _this;
+      }
+
+      var ratio = QRMath.glog(_this.getAt(0) ) - QRMath.glog(e.getAt(0) );
+
+      var num = new Array(_this.getLength() );
+      for (var i = 0; i < _this.getLength(); i += 1) {
+        num[i] = _this.getAt(i);
+      }
+
+      for (var i = 0; i < e.getLength(); i += 1) {
+        num[i] ^= QRMath.gexp(QRMath.glog(e.getAt(i) ) + ratio);
+      }
+
+      // recursive call
+      return qrPolynomial(num, 0).mod(e);
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // QRRSBlock
+  //---------------------------------------------------------------------
+
+  var QRRSBlock = function() {
+
+    var RS_BLOCK_TABLE = [
+
+      // L
+      // M
+      // Q
+      // H
+
+      // 1
+      [1, 26, 19],
+      [1, 26, 16],
+      [1, 26, 13],
+      [1, 26, 9],
+
+      // 2
+      [1, 44, 34],
+      [1, 44, 28],
+      [1, 44, 22],
+      [1, 44, 16],
+
+      // 3
+      [1, 70, 55],
+      [1, 70, 44],
+      [2, 35, 17],
+      [2, 35, 13],
+
+      // 4
+      [1, 100, 80],
+      [2, 50, 32],
+      [2, 50, 24],
+      [4, 25, 9],
+
+      // 5
+      [1, 134, 108],
+      [2, 67, 43],
+      [2, 33, 15, 2, 34, 16],
+      [2, 33, 11, 2, 34, 12],
+
+      // 6
+      [2, 86, 68],
+      [4, 43, 27],
+      [4, 43, 19],
+      [4, 43, 15],
+
+      // 7
+      [2, 98, 78],
+      [4, 49, 31],
+      [2, 32, 14, 4, 33, 15],
+      [4, 39, 13, 1, 40, 14],
+
+      // 8
+      [2, 121, 97],
+      [2, 60, 38, 2, 61, 39],
+      [4, 40, 18, 2, 41, 19],
+      [4, 40, 14, 2, 41, 15],
+
+      // 9
+      [2, 146, 116],
+      [3, 58, 36, 2, 59, 37],
+      [4, 36, 16, 4, 37, 17],
+      [4, 36, 12, 4, 37, 13],
+
+      // 10
+      [2, 86, 68, 2, 87, 69],
+      [4, 69, 43, 1, 70, 44],
+      [6, 43, 19, 2, 44, 20],
+      [6, 43, 15, 2, 44, 16],
+
+      // 11
+      [4, 101, 81],
+      [1, 80, 50, 4, 81, 51],
+      [4, 50, 22, 4, 51, 23],
+      [3, 36, 12, 8, 37, 13],
+
+      // 12
+      [2, 116, 92, 2, 117, 93],
+      [6, 58, 36, 2, 59, 37],
+      [4, 46, 20, 6, 47, 21],
+      [7, 42, 14, 4, 43, 15],
+
+      // 13
+      [4, 133, 107],
+      [8, 59, 37, 1, 60, 38],
+      [8, 44, 20, 4, 45, 21],
+      [12, 33, 11, 4, 34, 12],
+
+      // 14
+      [3, 145, 115, 1, 146, 116],
+      [4, 64, 40, 5, 65, 41],
+      [11, 36, 16, 5, 37, 17],
+      [11, 36, 12, 5, 37, 13],
+
+      // 15
+      [5, 109, 87, 1, 110, 88],
+      [5, 65, 41, 5, 66, 42],
+      [5, 54, 24, 7, 55, 25],
+      [11, 36, 12, 7, 37, 13],
+
+      // 16
+      [5, 122, 98, 1, 123, 99],
+      [7, 73, 45, 3, 74, 46],
+      [15, 43, 19, 2, 44, 20],
+      [3, 45, 15, 13, 46, 16],
+
+      // 17
+      [1, 135, 107, 5, 136, 108],
+      [10, 74, 46, 1, 75, 47],
+      [1, 50, 22, 15, 51, 23],
+      [2, 42, 14, 17, 43, 15],
+
+      // 18
+      [5, 150, 120, 1, 151, 121],
+      [9, 69, 43, 4, 70, 44],
+      [17, 50, 22, 1, 51, 23],
+      [2, 42, 14, 19, 43, 15],
+
+      // 19
+      [3, 141, 113, 4, 142, 114],
+      [3, 70, 44, 11, 71, 45],
+      [17, 47, 21, 4, 48, 22],
+      [9, 39, 13, 16, 40, 14],
+
+      // 20
+      [3, 135, 107, 5, 136, 108],
+      [3, 67, 41, 13, 68, 42],
+      [15, 54, 24, 5, 55, 25],
+      [15, 43, 15, 10, 44, 16],
+
+      // 21
+      [4, 144, 116, 4, 145, 117],
+      [17, 68, 42],
+      [17, 50, 22, 6, 51, 23],
+      [19, 46, 16, 6, 47, 17],
+
+      // 22
+      [2, 139, 111, 7, 140, 112],
+      [17, 74, 46],
+      [7, 54, 24, 16, 55, 25],
+      [34, 37, 13],
+
+      // 23
+      [4, 151, 121, 5, 152, 122],
+      [4, 75, 47, 14, 76, 48],
+      [11, 54, 24, 14, 55, 25],
+      [16, 45, 15, 14, 46, 16],
+
+      // 24
+      [6, 147, 117, 4, 148, 118],
+      [6, 73, 45, 14, 74, 46],
+      [11, 54, 24, 16, 55, 25],
+      [30, 46, 16, 2, 47, 17],
+
+      // 25
+      [8, 132, 106, 4, 133, 107],
+      [8, 75, 47, 13, 76, 48],
+      [7, 54, 24, 22, 55, 25],
+      [22, 45, 15, 13, 46, 16],
+
+      // 26
+      [10, 142, 114, 2, 143, 115],
+      [19, 74, 46, 4, 75, 47],
+      [28, 50, 22, 6, 51, 23],
+      [33, 46, 16, 4, 47, 17],
+
+      // 27
+      [8, 152, 122, 4, 153, 123],
+      [22, 73, 45, 3, 74, 46],
+      [8, 53, 23, 26, 54, 24],
+      [12, 45, 15, 28, 46, 16],
+
+      // 28
+      [3, 147, 117, 10, 148, 118],
+      [3, 73, 45, 23, 74, 46],
+      [4, 54, 24, 31, 55, 25],
+      [11, 45, 15, 31, 46, 16],
+
+      // 29
+      [7, 146, 116, 7, 147, 117],
+      [21, 73, 45, 7, 74, 46],
+      [1, 53, 23, 37, 54, 24],
+      [19, 45, 15, 26, 46, 16],
+
+      // 30
+      [5, 145, 115, 10, 146, 116],
+      [19, 75, 47, 10, 76, 48],
+      [15, 54, 24, 25, 55, 25],
+      [23, 45, 15, 25, 46, 16],
+
+      // 31
+      [13, 145, 115, 3, 146, 116],
+      [2, 74, 46, 29, 75, 47],
+      [42, 54, 24, 1, 55, 25],
+      [23, 45, 15, 28, 46, 16],
+
+      // 32
+      [17, 145, 115],
+      [10, 74, 46, 23, 75, 47],
+      [10, 54, 24, 35, 55, 25],
+      [19, 45, 15, 35, 46, 16],
+
+      // 33
+      [17, 145, 115, 1, 146, 116],
+      [14, 74, 46, 21, 75, 47],
+      [29, 54, 24, 19, 55, 25],
+      [11, 45, 15, 46, 46, 16],
+
+      // 34
+      [13, 145, 115, 6, 146, 116],
+      [14, 74, 46, 23, 75, 47],
+      [44, 54, 24, 7, 55, 25],
+      [59, 46, 16, 1, 47, 17],
+
+      // 35
+      [12, 151, 121, 7, 152, 122],
+      [12, 75, 47, 26, 76, 48],
+      [39, 54, 24, 14, 55, 25],
+      [22, 45, 15, 41, 46, 16],
+
+      // 36
+      [6, 151, 121, 14, 152, 122],
+      [6, 75, 47, 34, 76, 48],
+      [46, 54, 24, 10, 55, 25],
+      [2, 45, 15, 64, 46, 16],
+
+      // 37
+      [17, 152, 122, 4, 153, 123],
+      [29, 74, 46, 14, 75, 47],
+      [49, 54, 24, 10, 55, 25],
+      [24, 45, 15, 46, 46, 16],
+
+      // 38
+      [4, 152, 122, 18, 153, 123],
+      [13, 74, 46, 32, 75, 47],
+      [48, 54, 24, 14, 55, 25],
+      [42, 45, 15, 32, 46, 16],
+
+      // 39
+      [20, 147, 117, 4, 148, 118],
+      [40, 75, 47, 7, 76, 48],
+      [43, 54, 24, 22, 55, 25],
+      [10, 45, 15, 67, 46, 16],
+
+      // 40
+      [19, 148, 118, 6, 149, 119],
+      [18, 75, 47, 31, 76, 48],
+      [34, 54, 24, 34, 55, 25],
+      [20, 45, 15, 61, 46, 16]
+    ];
+
+    var qrRSBlock = function(totalCount, dataCount) {
+      var _this = {};
+      _this.totalCount = totalCount;
+      _this.dataCount = dataCount;
+      return _this;
+    };
+
+    var _this = {};
+
+    var getRsBlockTable = function(typeNumber, errorCorrectionLevel) {
+
+      switch(errorCorrectionLevel) {
+      case QRErrorCorrectionLevel.L :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 0];
+      case QRErrorCorrectionLevel.M :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 1];
+      case QRErrorCorrectionLevel.Q :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 2];
+      case QRErrorCorrectionLevel.H :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 3];
+      default :
+        return undefined;
+      }
+    };
+
+    _this.getRSBlocks = function(typeNumber, errorCorrectionLevel) {
+
+      var rsBlock = getRsBlockTable(typeNumber, errorCorrectionLevel);
+
+      if (typeof rsBlock == 'undefined') {
+        throw 'bad rs block @ typeNumber:' + typeNumber +
+            '/errorCorrectionLevel:' + errorCorrectionLevel;
+      }
+
+      var length = rsBlock.length / 3;
+
+      var list = [];
+
+      for (var i = 0; i < length; i += 1) {
+
+        var count = rsBlock[i * 3 + 0];
+        var totalCount = rsBlock[i * 3 + 1];
+        var dataCount = rsBlock[i * 3 + 2];
+
+        for (var j = 0; j < count; j += 1) {
+          list.push(qrRSBlock(totalCount, dataCount) );
+        }
+      }
+
+      return list;
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // qrBitBuffer
+  //---------------------------------------------------------------------
+
+  var qrBitBuffer = function() {
+
+    var _buffer = [];
+    var _length = 0;
+
+    var _this = {};
+
+    _this.getBuffer = function() {
+      return _buffer;
+    };
+
+    _this.getAt = function(index) {
+      var bufIndex = Math.floor(index / 8);
+      return ( (_buffer[bufIndex] >>> (7 - index % 8) ) & 1) == 1;
+    };
+
+    _this.put = function(num, length) {
+      for (var i = 0; i < length; i += 1) {
+        _this.putBit( ( (num >>> (length - i - 1) ) & 1) == 1);
+      }
+    };
+
+    _this.getLengthInBits = function() {
+      return _length;
+    };
+
+    _this.putBit = function(bit) {
+
+      var bufIndex = Math.floor(_length / 8);
+      if (_buffer.length <= bufIndex) {
+        _buffer.push(0);
+      }
+
+      if (bit) {
+        _buffer[bufIndex] |= (0x80 >>> (_length % 8) );
+      }
+
+      _length += 1;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrNumber
+  //---------------------------------------------------------------------
+
+  var qrNumber = function(data) {
+
+    var _mode = QRMode.MODE_NUMBER;
+    var _data = data;
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _data.length;
+    };
+
+    _this.write = function(buffer) {
+
+      var data = _data;
+
+      var i = 0;
+
+      while (i + 2 < data.length) {
+        buffer.put(strToNum(data.substring(i, i + 3) ), 10);
+        i += 3;
+      }
+
+      if (i < data.length) {
+        if (data.length - i == 1) {
+          buffer.put(strToNum(data.substring(i, i + 1) ), 4);
+        } else if (data.length - i == 2) {
+          buffer.put(strToNum(data.substring(i, i + 2) ), 7);
+        }
+      }
+    };
+
+    var strToNum = function(s) {
+      var num = 0;
+      for (var i = 0; i < s.length; i += 1) {
+        num = num * 10 + chatToNum(s.charAt(i) );
+      }
+      return num;
+    };
+
+    var chatToNum = function(c) {
+      if ('0' <= c && c <= '9') {
+        return c.charCodeAt(0) - '0'.charCodeAt(0);
+      }
+      throw 'illegal char :' + c;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrAlphaNum
+  //---------------------------------------------------------------------
+
+  var qrAlphaNum = function(data) {
+
+    var _mode = QRMode.MODE_ALPHA_NUM;
+    var _data = data;
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _data.length;
+    };
+
+    _this.write = function(buffer) {
+
+      var s = _data;
+
+      var i = 0;
+
+      while (i + 1 < s.length) {
+        buffer.put(
+          getCode(s.charAt(i) ) * 45 +
+          getCode(s.charAt(i + 1) ), 11);
+        i += 2;
+      }
+
+      if (i < s.length) {
+        buffer.put(getCode(s.charAt(i) ), 6);
+      }
+    };
+
+    var getCode = function(c) {
+
+      if ('0' <= c && c <= '9') {
+        return c.charCodeAt(0) - '0'.charCodeAt(0);
+      } else if ('A' <= c && c <= 'Z') {
+        return c.charCodeAt(0) - 'A'.charCodeAt(0) + 10;
+      } else {
+        switch (c) {
+        case ' ' : return 36;
+        case '$' : return 37;
+        case '%' : return 38;
+        case '*' : return 39;
+        case '+' : return 40;
+        case '-' : return 41;
+        case '.' : return 42;
+        case '/' : return 43;
+        case ':' : return 44;
+        default :
+          throw 'illegal char :' + c;
+        }
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qr8BitByte
+  //---------------------------------------------------------------------
+
+  var qr8BitByte = function(data) {
+
+    var _mode = QRMode.MODE_8BIT_BYTE;
+    var _data = data;
+    var _bytes = qrcode.stringToBytes(data);
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _bytes.length;
+    };
+
+    _this.write = function(buffer) {
+      for (var i = 0; i < _bytes.length; i += 1) {
+        buffer.put(_bytes[i], 8);
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrKanji
+  //---------------------------------------------------------------------
+
+  var qrKanji = function(data) {
+
+    var _mode = QRMode.MODE_KANJI;
+    var _data = data;
+
+    var stringToBytes = qrcode.stringToBytesFuncs['SJIS'];
+    if (!stringToBytes) {
+      throw 'sjis not supported.';
+    }
+    !function(c, code) {
+      // self test for sjis support.
+      var test = stringToBytes(c);
+      if (test.length != 2 || ( (test[0] << 8) | test[1]) != code) {
+        throw 'sjis not supported.';
+      }
+    }('\u53cb', 0x9746);
+
+    var _bytes = stringToBytes(data);
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return ~~(_bytes.length / 2);
+    };
+
+    _this.write = function(buffer) {
+
+      var data = _bytes;
+
+      var i = 0;
+
+      while (i + 1 < data.length) {
+
+        var c = ( (0xff & data[i]) << 8) | (0xff & data[i + 1]);
+
+        if (0x8140 <= c && c <= 0x9FFC) {
+          c -= 0x8140;
+        } else if (0xE040 <= c && c <= 0xEBBF) {
+          c -= 0xC140;
+        } else {
+          throw 'illegal char at ' + (i + 1) + '/' + c;
+        }
+
+        c = ( (c >>> 8) & 0xff) * 0xC0 + (c & 0xff);
+
+        buffer.put(c, 13);
+
+        i += 2;
+      }
+
+      if (i < data.length) {
+        throw 'illegal char at ' + (i + 1);
+      }
+    };
+
+    return _this;
+  };
+
+  //=====================================================================
+  // GIF Support etc.
+  //
+
+  //---------------------------------------------------------------------
+  // byteArrayOutputStream
+  //---------------------------------------------------------------------
+
+  var byteArrayOutputStream = function() {
+
+    var _bytes = [];
+
+    var _this = {};
+
+    _this.writeByte = function(b) {
+      _bytes.push(b & 0xff);
+    };
+
+    _this.writeShort = function(i) {
+      _this.writeByte(i);
+      _this.writeByte(i >>> 8);
+    };
+
+    _this.writeBytes = function(b, off, len) {
+      off = off || 0;
+      len = len || b.length;
+      for (var i = 0; i < len; i += 1) {
+        _this.writeByte(b[i + off]);
+      }
+    };
+
+    _this.writeString = function(s) {
+      for (var i = 0; i < s.length; i += 1) {
+        _this.writeByte(s.charCodeAt(i) );
+      }
+    };
+
+    _this.toByteArray = function() {
+      return _bytes;
+    };
+
+    _this.toString = function() {
+      var s = '';
+      s += '[';
+      for (var i = 0; i < _bytes.length; i += 1) {
+        if (i > 0) {
+          s += ',';
+        }
+        s += _bytes[i];
+      }
+      s += ']';
+      return s;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // base64EncodeOutputStream
+  //---------------------------------------------------------------------
+
+  var base64EncodeOutputStream = function() {
+
+    var _buffer = 0;
+    var _buflen = 0;
+    var _length = 0;
+    var _base64 = '';
+
+    var _this = {};
+
+    var writeEncoded = function(b) {
+      _base64 += String.fromCharCode(encode(b & 0x3f) );
+    };
+
+    var encode = function(n) {
+      if (n < 0) {
+        // error.
+      } else if (n < 26) {
+        return 0x41 + n;
+      } else if (n < 52) {
+        return 0x61 + (n - 26);
+      } else if (n < 62) {
+        return 0x30 + (n - 52);
+      } else if (n == 62) {
+        return 0x2b;
+      } else if (n == 63) {
+        return 0x2f;
+      }
+      throw 'n:' + n;
+    };
+
+    _this.writeByte = function(n) {
+
+      _buffer = (_buffer << 8) | (n & 0xff);
+      _buflen += 8;
+      _length += 1;
+
+      while (_buflen >= 6) {
+        writeEncoded(_buffer >>> (_buflen - 6) );
+        _buflen -= 6;
+      }
+    };
+
+    _this.flush = function() {
+
+      if (_buflen > 0) {
+        writeEncoded(_buffer << (6 - _buflen) );
+        _buffer = 0;
+        _buflen = 0;
+      }
+
+      if (_length % 3 != 0) {
+        // padding
+        var padlen = 3 - _length % 3;
+        for (var i = 0; i < padlen; i += 1) {
+          _base64 += '=';
+        }
+      }
+    };
+
+    _this.toString = function() {
+      return _base64;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // base64DecodeInputStream
+  //---------------------------------------------------------------------
+
+  var base64DecodeInputStream = function(str) {
+
+    var _str = str;
+    var _pos = 0;
+    var _buffer = 0;
+    var _buflen = 0;
+
+    var _this = {};
+
+    _this.read = function() {
+
+      while (_buflen < 8) {
+
+        if (_pos >= _str.length) {
+          if (_buflen == 0) {
+            return -1;
+          }
+          throw 'unexpected end of file./' + _buflen;
+        }
+
+        var c = _str.charAt(_pos);
+        _pos += 1;
+
+        if (c == '=') {
+          _buflen = 0;
+          return -1;
+        } else if (c.match(/^\s$/) ) {
+          // ignore if whitespace.
+          continue;
+        }
+
+        _buffer = (_buffer << 6) | decode(c.charCodeAt(0) );
+        _buflen += 6;
+      }
+
+      var n = (_buffer >>> (_buflen - 8) ) & 0xff;
+      _buflen -= 8;
+      return n;
+    };
+
+    var decode = function(c) {
+      if (0x41 <= c && c <= 0x5a) {
+        return c - 0x41;
+      } else if (0x61 <= c && c <= 0x7a) {
+        return c - 0x61 + 26;
+      } else if (0x30 <= c && c <= 0x39) {
+        return c - 0x30 + 52;
+      } else if (c == 0x2b) {
+        return 62;
+      } else if (c == 0x2f) {
+        return 63;
+      } else {
+        throw 'c:' + c;
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // gifImage (B/W)
+  //---------------------------------------------------------------------
+
+  var gifImage = function(width, height) {
+
+    var _width = width;
+    var _height = height;
+    var _data = new Array(width * height);
+
+    var _this = {};
+
+    _this.setPixel = function(x, y, pixel) {
+      _data[y * _width + x] = pixel;
+    };
+
+    _this.write = function(out) {
+
+      //---------------------------------
+      // GIF Signature
+
+      out.writeString('GIF87a');
+
+      //---------------------------------
+      // Screen Descriptor
+
+      out.writeShort(_width);
+      out.writeShort(_height);
+
+      out.writeByte(0x80); // 2bit
+      out.writeByte(0);
+      out.writeByte(0);
+
+      //---------------------------------
+      // Global Color Map
+
+      // black
+      out.writeByte(0x00);
+      out.writeByte(0x00);
+      out.writeByte(0x00);
+
+      // white
+      out.writeByte(0xff);
+      out.writeByte(0xff);
+      out.writeByte(0xff);
+
+      //---------------------------------
+      // Image Descriptor
+
+      out.writeString(',');
+      out.writeShort(0);
+      out.writeShort(0);
+      out.writeShort(_width);
+      out.writeShort(_height);
+      out.writeByte(0);
+
+      //---------------------------------
+      // Local Color Map
+
+      //---------------------------------
+      // Raster Data
+
+      var lzwMinCodeSize = 2;
+      var raster = getLZWRaster(lzwMinCodeSize);
+
+      out.writeByte(lzwMinCodeSize);
+
+      var offset = 0;
+
+      while (raster.length - offset > 255) {
+        out.writeByte(255);
+        out.writeBytes(raster, offset, 255);
+        offset += 255;
+      }
+
+      out.writeByte(raster.length - offset);
+      out.writeBytes(raster, offset, raster.length - offset);
+      out.writeByte(0x00);
+
+      //---------------------------------
+      // GIF Terminator
+      out.writeString(';');
+    };
+
+    var bitOutputStream = function(out) {
+
+      var _out = out;
+      var _bitLength = 0;
+      var _bitBuffer = 0;
+
+      var _this = {};
+
+      _this.write = function(data, length) {
+
+        if ( (data >>> length) != 0) {
+          throw 'length over';
+        }
+
+        while (_bitLength + length >= 8) {
+          _out.writeByte(0xff & ( (data << _bitLength) | _bitBuffer) );
+          length -= (8 - _bitLength);
+          data >>>= (8 - _bitLength);
+          _bitBuffer = 0;
+          _bitLength = 0;
+        }
+
+        _bitBuffer = (data << _bitLength) | _bitBuffer;
+        _bitLength = _bitLength + length;
+      };
+
+      _this.flush = function() {
+        if (_bitLength > 0) {
+          _out.writeByte(_bitBuffer);
+        }
+      };
+
+      return _this;
+    };
+
+    var getLZWRaster = function(lzwMinCodeSize) {
+
+      var clearCode = 1 << lzwMinCodeSize;
+      var endCode = (1 << lzwMinCodeSize) + 1;
+      var bitLength = lzwMinCodeSize + 1;
+
+      // Setup LZWTable
+      var table = lzwTable();
+
+      for (var i = 0; i < clearCode; i += 1) {
+        table.add(String.fromCharCode(i) );
+      }
+      table.add(String.fromCharCode(clearCode) );
+      table.add(String.fromCharCode(endCode) );
+
+      var byteOut = byteArrayOutputStream();
+      var bitOut = bitOutputStream(byteOut);
+
+      // clear code
+      bitOut.write(clearCode, bitLength);
+
+      var dataIndex = 0;
+
+      var s = String.fromCharCode(_data[dataIndex]);
+      dataIndex += 1;
+
+      while (dataIndex < _data.length) {
+
+        var c = String.fromCharCode(_data[dataIndex]);
+        dataIndex += 1;
+
+        if (table.contains(s + c) ) {
+
+          s = s + c;
+
+        } else {
+
+          bitOut.write(table.indexOf(s), bitLength);
+
+          if (table.size() < 0xfff) {
+
+            if (table.size() == (1 << bitLength) ) {
+              bitLength += 1;
+            }
+
+            table.add(s + c);
+          }
+
+          s = c;
+        }
+      }
+
+      bitOut.write(table.indexOf(s), bitLength);
+
+      // end code
+      bitOut.write(endCode, bitLength);
+
+      bitOut.flush();
+
+      return byteOut.toByteArray();
+    };
+
+    var lzwTable = function() {
+
+      var _map = {};
+      var _size = 0;
+
+      var _this = {};
+
+      _this.add = function(key) {
+        if (_this.contains(key) ) {
+          throw 'dup key:' + key;
+        }
+        _map[key] = _size;
+        _size += 1;
+      };
+
+      _this.size = function() {
+        return _size;
+      };
+
+      _this.indexOf = function(key) {
+        return _map[key];
+      };
+
+      _this.contains = function(key) {
+        return typeof _map[key] != 'undefined';
+      };
+
+      return _this;
+    };
+
+    return _this;
+  };
+
+  var createDataURL = function(width, height, getPixel) {
+    var gif = gifImage(width, height);
+    for (var y = 0; y < height; y += 1) {
+      for (var x = 0; x < width; x += 1) {
+        gif.setPixel(x, y, getPixel(x, y) );
+      }
+    }
+
+    var b = byteArrayOutputStream();
+    gif.write(b);
+
+    var base64 = base64EncodeOutputStream();
+    var bytes = b.toByteArray();
+    for (var i = 0; i < bytes.length; i += 1) {
+      base64.writeByte(bytes[i]);
+    }
+    base64.flush();
+
+    return 'data:image/gif;base64,' + base64;
+  };
+
+  //---------------------------------------------------------------------
+  // returns qrcode function.
+
+  return qrcode;
+}();
+
+// multibyte support
+!function() {
+
+  qrcode.stringToBytesFuncs['UTF-8'] = function(s) {
+    // http://stackoverflow.com/questions/18729405/how-to-convert-utf8-string-to-byte-array
+    function toUTF8Array(str) {
+      var utf8 = [];
+      for (var i=0; i < str.length; i++) {
+        var charcode = str.charCodeAt(i);
+        if (charcode < 0x80) utf8.push(charcode);
+        else if (charcode < 0x800) {
+          utf8.push(0xc0 | (charcode >> 6),
+              0x80 | (charcode & 0x3f));
+        }
+        else if (charcode < 0xd800 || charcode >= 0xe000) {
+          utf8.push(0xe0 | (charcode >> 12),
+              0x80 | ((charcode>>6) & 0x3f),
+              0x80 | (charcode & 0x3f));
+        }
+        // surrogate pair
+        else {
+          i++;
+          // UTF-16 encodes 0x10000-0x10FFFF by
+          // subtracting 0x10000 and splitting the
+          // 20 bits of 0x0-0xFFFFF into two halves
+          charcode = 0x10000 + (((charcode & 0x3ff)<<10)
+            | (str.charCodeAt(i) & 0x3ff));
+          utf8.push(0xf0 | (charcode >>18),
+              0x80 | ((charcode>>12) & 0x3f),
+              0x80 | ((charcode>>6) & 0x3f),
+              0x80 | (charcode & 0x3f));
+        }
+      }
+      return utf8;
+    }
+    return toUTF8Array(s);
+  };
+
+}();
+
+(function (factory) {
+  if (typeof define === 'function' && define.amd) {
+      define([], factory);
+  } else if (typeof exports === 'object') {
+      module.exports = factory();
+  }
+}(function () {
+    return qrcode;
+}));
+</script>
+<script>
+(function(){
+"use strict";
+const ORIGINAL = "<!doctype html>\n" + document.documentElement.outerHTML;
+const LS_KEY = "sh1-qr-hoso-v2";
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const safeUrl = u => /^https?:\/\//i.test((u||"").trim()) ? u.trim() : "";
+
+/* ---------- data ---------- */
+let seed = {};
+try { seed = JSON.parse($("#seed").textContent); } catch(e){ seed = {}; }
+let DB = seed;
+try { const s = seed.publicBuild ? null : localStorage.getItem(LS_KEY); if (s) { const d = JSON.parse(s); if (d && d.equipment) {
+  DB = d;
+  (seed.equipment||[]).forEach(se => { if (!DB.equipment.some(x => x.code === se.code)) DB.equipment.push(se); });
+  if ((DB.namesRev||0) < (seed.namesRev||0)) {   /* áp dụng quy định tên & KKS mới, giữ các nội dung khác anh đã nhập */
+    (seed.equipment||[]).forEach(se => { const x = DB.equipment.find(y => y.code === se.code); if (x) { x.name = se.name; x.kks = se.kks; x.match = se.match; x.area = x.area || se.area; } });
+    DB.namesRev = seed.namesRev;
+  }
+  const ord = c => { const i = (seed.equipment||[]).findIndex(x => x.code === c); return i < 0 ? 1e6 : i; };
+  DB.equipment.sort((x,y) => ord(x.code) - ord(y.code));
+  DB.settings = Object.assign({}, seed.settings||{}, DB.settings||{});
+  for (const k in (seed.settings||{})) if (DB.settings[k] === "" && seed.settings[k]) DB.settings[k] = seed.settings[k];
+} } } catch(e){}
+DB.settings = Object.assign({plant:"NMNĐ Sông Hậu 1", system:"Hệ thống nhiên liệu", footer:"Quét để xem tài liệu · lịch sử lỗi · lịch BD", ecc:"Q"}, DB.settings||{});
+DB.equipment = DB.equipment || [];
+let saveTimer;
+function save(){
+  DB.savedAt = Date.now();
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(()=>{ try{ localStorage.setItem(LS_KEY, JSON.stringify(DB)); }catch(e){} }, 250);
+}
+function toast(m){ const t=$("#toast"); t.textContent=m; t.classList.add("show"); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove("show"),2200); }
+
+/* ---------- QR ---------- */
+qrcode.stringToBytes = qrcode.stringToBytesFuncs["UTF-8"];
+function qrMake(text){
+  const q = qrcode(0, DB.settings.ecc || "Q"); q.addData(text, "Byte"); q.make(); return q;
+}
+function qrSvg(text, quiet=4){
+  if(!text) return "";
+  const q = qrMake(text), n = q.getModuleCount(), s = n + quiet*2;
+  let d = "";
+  for (let r=0;r<n;r++) for (let c=0;c<n;c++) if (q.isDark(r,c)) d += `M${c+quiet} ${r+quiet}h1v1h-1z`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${s} ${s}" shape-rendering="crispEdges" role="img" aria-label="Mã QR"><rect width="${s}" height="${s}" fill="#fff"/><path d="${d}" fill="#0A2A4A"/></svg>`;
+}
+function qrInfo(text){ if(!text) return null; const q=qrMake(text); return {modules:q.getModuleCount(), len:text.length}; }
+function target(e){
+  const own = safeUrl(e.hubUrl); if (own) return {url:own, kind:"Trang hồ sơ riêng"};
+  const base = safeUrl(DB.settings.baseUrl); if (base) return {url:base.split("#")[0].split("?")[0] + "?tb=" + encodeURIComponent(e.code), kind:"Trang hồ sơ (máy chủ)"};
+  const mode = DB.settings.qrMode || "docs";
+  if (mode === "docs") { const d = docFolder(e); return d ? {url:d, kind:/sharepoint|onedrive|1drv/i.test(d) ? "Thư mục tài liệu SharePoint" : /drive\.google/i.test(d) ? "Thư mục tài liệu Google Drive" : "Thư mục tài liệu"} : {url:"", kind:""}; }
+  if (mode === "maximo" && e.kks && maximo("asset", e)) return {url:maximo("asset", e), kind:"Tài sản Maximo (mạng nội bộ)"};
+  if (mode !== "none" && safeUrl(DB.settings.faultUrl)) return {url:safeUrl(DB.settings.faultUrl), kind:"Sổ theo dõi bất thường (Google)"};
+  return {url:"", kind:""};
+}
+function targetUrl(e){ return target(e).url; }
+/* Link thư mục con theo mã TB, dựng từ thư mục gốc SharePoint (link dạng AllItems.aspx?id=… hoặc đường dẫn trực tiếp) */
+function docFolder(e){
+  const own = safeUrl(e.docUrl); if (own) return own;
+  const root = safeUrl(DB.settings.docRoot); if (!root || !e.code) return "";
+  try {
+    const u = new URL(root);
+    if (/sharepoint\.com$/i.test(u.hostname)) {
+      const path = u.searchParams.get("id") || u.searchParams.get("RootFolder") || decodeURIComponent(u.pathname);
+      return u.origin + encodeURI(path.replace(/\/+$/,"") + "/" + e.code);
+    }
+  } catch(_){}
+  return "";
+}
+function linkOf(e, key, skey){ return safeUrl(e[key]) || safeUrl(DB.settings[skey]); }
+/* Maximo: mở thẳng ứng dụng và lọc theo asset (IBM Maximo URL launch: event=loadapp + useqbe) */
+function maximo(app, e, insert){
+  const base = safeUrl(DB.settings.maximoBase); if (!base) return "";
+  const root = base.replace(/\/+$/,"").replace(/\/ui.*$/,"") + "/ui/?event=loadapp&value=" + app;
+  if (insert) return root + "&additionalevent=insert";
+  if (!e || !e.kks) return "";
+  let q = "assetnum=" + e.kks.trim(); if (DB.settings.maximoSite) q += "|siteid=" + DB.settings.maximoSite.trim();
+  return root + "&additionalevent=useqbe&additionaleventvalue=" + encodeURIComponent(q);
+}
+function keywords(e){
+  return (e.match || [e.code, e.kks].filter(Boolean).join(",")).split(/[,;]/).map(s=>s.replace(/[\s\-_.]/g,"").toLowerCase()).filter(Boolean);
+}
+/* Đọc Google Sheets qua gviz (JSONP – chạy được cả khi mở file offline, miễn điện thoại có Internet và sổ chia sẻ "Bất kỳ ai có link") */
+function sheetFeed(){
+  const u = DB.settings.faultUrl || ""; const m = u.match(/\/spreadsheets\/d\/([\w-]+)/); if (!m) return Promise.reject("no-sheet");
+  const gid = (u.match(/[#&?]gid=(\d+)/)||[])[1] || "0";
+  return new Promise((res, rej) => {
+    const cb = "__gv" + Date.now(), s = document.createElement("script");
+    const t = setTimeout(()=>{ cleanup(); rej("timeout"); }, 12000);
+    function cleanup(){ clearTimeout(t); delete window[cb]; s.remove(); }
+    window[cb] = d => { cleanup(); d && d.table ? res(d.table) : rej("bad"); };
+    s.onerror = () => { cleanup(); rej("net"); };
+    s.src = `https://docs.google.com/spreadsheets/d/${m[1]}/gviz/tq?gid=${gid}&headers=1&tqx=out:json;responseHandler:${cb}`;
+    document.head.appendChild(s);
+  });
+}
+function parseFeed(table){
+  const cols = table.cols.map(c => (c.label||"").toLowerCase());
+  const find = (words, fallback) => { const i = cols.findIndex(l => words.some(w => l.includes(w))); return i >= 0 ? i : fallback; };
+  const ix = { sr:find(["service request","no. sr"],1), sys:find(["hệ thống/thiết bị","thiết bị"],2), kks:find(["kks"],4),
+    desc:find(["mô tả"],5), prog:find(["diễn biến"],6), prio:find(["ưu tiên"],7), who:find(["người phát hiện"],9),
+    time:find(["thời gian phát hiện"],10), status:find(["tình trạng"],15), cause:find(["nguyên nhân"],16), fix:find(["biện pháp"],17) };
+  const val = (r,i) => { const c = r.c && r.c[i]; return c ? String(c.f ?? c.v ?? "").trim() : ""; };
+  return table.rows.map(r => { const o = {}; for (const k in ix) o[k] = val(r, ix[k]); return o; }).filter(o => o.desc || o.sys);
+}
+function matchRows(rows, e){
+  const kw = keywords(e); if (!kw.length) return [];
+  return rows.filter(r => { const hay = (r.sys + " " + r.kks).replace(/[\s\-_.]/g,"").toLowerCase(); return kw.some(k => hay.includes(k)); });
+}
+const isDone = s => /đã\s*hoàn|hoàn thành|đã xử lý|xong|closed|done/i.test(s) && !/chưa/i.test(s);
+
+/* ---------- MẬT KHẨU TÀI LIỆU: PBKDF2-SHA256 + AES-GCM 256 ---------- */
+const b64 = u8 => btoa(String.fromCharCode(...u8));
+const unb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+async function deriveKey(pass, salt, iter){
+  const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(pass), "PBKDF2", false, ["deriveKey"]);
+  return crypto.subtle.deriveKey({name:"PBKDF2", salt, iterations:iter, hash:"SHA-256"}, base, {name:"AES-GCM", length:256}, false, ["encrypt","decrypt"]);
+}
+async function lockData(obj, pass){
+  const salt = crypto.getRandomValues(new Uint8Array(16)), iv = crypto.getRandomValues(new Uint8Array(12)), iter = 200000;
+  const key = await deriveKey(pass, salt, iter);
+  const ct = new Uint8Array(await crypto.subtle.encrypt({name:"AES-GCM", iv}, key, new TextEncoder().encode(JSON.stringify(obj))));
+  return {v:1, iter, salt:b64(salt), iv:b64(iv), ct:b64(ct)};
+}
+async function unlockData(box, pass){
+  const key = await deriveKey(pass, unb64(box.salt), box.iter);
+  const pt = await crypto.subtle.decrypt({name:"AES-GCM", iv:unb64(box.iv)}, key, unb64(box.ct));
+  return JSON.parse(new TextDecoder().decode(pt));
+}
+const UNLOCK_KEY = "sh1-qr-unlock";
+let UNLOCKED = null;
+function rememberPass(pass){
+  const keep = DB.settings.passKeep || "12";
+  try {
+    if (keep === "session") sessionStorage.setItem(UNLOCK_KEY, pass);
+    else localStorage.setItem(UNLOCK_KEY, JSON.stringify({p:pass, exp:Date.now() + (+keep)*3600e3}));
+  } catch(_){}
+}
+function recallPass(){
+  try { const s = sessionStorage.getItem(UNLOCK_KEY); if (s) return s; } catch(_){}
+  try { const o = JSON.parse(localStorage.getItem(UNLOCK_KEY) || "null"); if (o && o.exp > Date.now()) return o.p; localStorage.removeItem(UNLOCK_KEY); } catch(_){}
+  return "";
+}
+function forgetPass(){ try{ sessionStorage.removeItem(UNLOCK_KEY); localStorage.removeItem(UNLOCK_KEY); }catch(_){} UNLOCKED = null; }
+
+/* ---------- ICONS ---------- */
+const IC = {
+  doc:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg>',
+  alert:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>',
+  list:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>',
+  wrench:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/></svg>',
+  cal:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>',
+  lock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>',
+  phone:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>'
+};
+
+/* ---------- ROUTING ---------- */
+const params = new URLSearchParams(location.search || location.hash.replace(/^#/,"?"));
+const hubCode = params.get("tb");
+
+/* ================= HUB ================= */
+function renderHub(code, preview){
+  const e = DB.equipment.find(x => x.code.toLowerCase() === String(code).toLowerCase());
+  const hub = $("#hub"); hub.classList.remove("hidden"); $("#admin").classList.add("hidden");
+  document.title = e ? `${e.code} – ${e.name}` : "Không tìm thấy thiết bị";
+  if (!e){
+    hub.innerHTML = `<div class="hero"><div class="org"><span>${esc(DB.settings.plant)}</span></div><div class="code">?</div><div class="name">Không tìm thấy thiết bị mã “${esc(code)}”. Liên hệ trưởng kíp để cập nhật tem QR.</div></div>`;
+    return;
+  }
+  const tile = (href, icon, title, sub, cls="") => `<a class="tile reveal ${cls} ${href?"":"dis"}" ${href?`href="${esc(href)}" target="_blank" rel="noopener"`:""}><span class="ic">${IC[icon]}</span><b>${esc(title)}</b><small>${esc(href?sub:"Chưa gắn link")}</small></a>`;
+  const specs = (e.specs||[]).filter(s=>s.k&&s.v);
+  const locked = !!DB.locked && !preview;
+  const sec = locked ? (UNLOCKED && UNLOCKED[e.code]) : null;
+  const folder = locked ? (sec ? safeUrl(sec.folder) : "") : docFolder(e);
+  const docs = (locked ? (sec ? sec.docs : []) : (e.docs||[])).filter(d=>d.name && safeUrl(d.url));
+  const hasDocs = locked ? !!e.hasDocs : !!(folder || docs.length);
+  const faults = (e.faults||[]).filter(f=>f.sym);
+  const meta = [e.area, e.maker, e.model, e.year && ("VH " + e.year)].filter(Boolean);
+  hub.innerHTML = `
+  <div class="hero">
+    <div class="org"><span>${esc(DB.settings.plant)}</span><span>${esc(DB.settings.system)}</span></div>
+    <div class="code">${esc(e.code)}</div>
+    <div class="name">${esc(e.name)}</div>
+    ${meta.length?`<div class="meta">${meta.map(m=>`<span>${esc(m)}</span>`).join("")}</div>`:""}
+  </div>
+  <div class="hubwrap">
+    <div class="tiles">
+      ${tile(linkOf(e,"formUrl","formUrl") || maximo("sr",null,true),"alert","Báo lỗi bất thường","Tạo yêu cầu (SR) trên CMMS","primary")}
+      ${tile(linkOf(e,"faultUrl","faultUrl"),"list","Sổ theo dõi bất thường","Nguyên nhân · cách xử lý")}
+      ${tile(linkOf(e,"histUrl","histUrl") || maximo("wotrack",e),"wrench","Lịch sử bảo dưỡng","Work Order theo KKS · Maximo")}
+      ${tile(linkOf(e,"planUrl","planUrl") || maximo("pm",e),"cal","Lịch BD định kỳ","PM theo KKS · Maximo")}
+      ${tile(maximo("sr",e),"alert","Các yêu cầu đã báo","Service Request · Maximo")}
+      ${locked && !sec && hasDocs
+        ? `<a class="tile reveal" href="#" id="openLock"><span class="lk">🔒 Mật khẩu</span><span class="ic">${IC.lock}</span><b>Tài liệu kỹ thuật</b><small>Nhập mật khẩu để mở</small></a>`
+        : tile(folder || (locked ? "" : maximo("asset",e)),"doc","Tài liệu kỹ thuật", sec ? "Đã mở khóa · thư mục tài liệu" : "Manual · bản vẽ · quy trình")}
+      ${DB.settings.contact?`<a class="tile reveal" href="tel:${esc(String(DB.settings.contact).replace(/[^\d+]/g,""))}"><span class="ic">${IC.phone}</span><b>Gọi trực kíp</b><small>${esc(DB.settings.contact)}</small></a>`:""}
+    </div>
+    ${maximo("asset",e)?`<p class="hint" style="margin:10px 4px 0">Các mục Maximo cần kết nối mạng nội bộ nhà máy (Wi-Fi/VPN) và tài khoản CMMS.</p>`:""}
+    ${DB.settings.faultUrl?`<div class="sec reveal" id="live"><h3>Bất thường ghi nhận – sổ theo dõi ${new Date().getFullYear()}</h3><div class="hint" id="liveBody">Đang tải dữ liệu từ sổ theo dõi…</div></div>`:""}
+    ${locked && !sec && hasDocs ? `<div class="sec reveal hidden" id="lockSec"><h3>${IC.lock.replace('<svg','<svg width="16" height="16"')} Tài liệu kỹ thuật – cần mật khẩu</h3>
+      <form class="lockbox" id="lockForm" autocomplete="off"><input type="password" id="lockPass" placeholder="Nhập mật khẩu" inputmode="text" autocomplete="current-password" aria-label="Mật khẩu tài liệu">
+      <button class="btn primary" type="submit" style="padding:12px">Mở tài liệu</button><div class="err" id="lockErr"></div>
+      ${DB.settings.passHint?`<div class="hint" style="margin:0">${esc(DB.settings.passHint)}</div>`:""}</form></div>` : ""}
+    ${locked && sec ? `<p class="hint" style="margin:10px 4px 0">Đã mở khóa tài liệu. <a href="#" id="relock">Khóa lại</a></p>` : ""}
+    ${e.warning?`<div class="sec reveal"><h3>⚠ Lưu ý an toàn / khuyến cáo</h3><div class="note">${esc(e.warning)}</div></div>`:""}
+    ${faults.length?`<div class="sec reveal"><h3>Lỗi thường gặp & cách xử lý</h3>${faults.map(f=>`<details class="fault"><summary>${esc(f.sym)}</summary><p>${esc(f.fix||"")}</p></details>`).join("")}</div>`:""}
+    ${hubVtHtml(e, locked, sec)}
+    ${specs.length?`<div class="sec reveal"><h3>Thông số kỹ thuật</h3><div class="kv">${specs.map(s=>`<div>${esc(s.k)}</div><div>${esc(s.v)}</div>`).join("")}</div></div>`:""}
+    ${docs.length?`<div class="sec reveal"><h3>Tài liệu PDF</h3>${docs.map(d=>`<a class="doclink" href="${esc(safeUrl(d.url))}" target="_blank" rel="noopener"><span class="pdf">PDF</span><span>${esc(d.name)}</span><span class="arr">›</span></a>`).join("")}</div>`:""}
+    ${e.owner?`<div class="sec reveal"><h3>Phụ trách</h3><div style="font-size:13.5px">${esc(e.owner)}</div></div>`:""}
+    <div class="hubfoot">Cập nhật: ${new Date(DB.savedAt||Date.now()).toLocaleDateString("vi-VN")} · ${esc(DB.settings.plant)}</div>
+  </div>
+  ${preview?`<div class="backbar"><button class="btn primary" id="backAdmin">← Quay lại chỉnh sửa</button></div>`:""}`;
+  const io = "IntersectionObserver" in window ? new IntersectionObserver(es=>es.forEach(x=>{ if(x.isIntersecting){ x.target.classList.add("in"); io.unobserve(x.target);} }),{threshold:.08}) : null;
+  $$(".reveal",hub).forEach((el,i)=>{ el.style.transitionDelay = Math.min(i,8)*45+"ms"; io ? io.observe(el) : el.classList.add("in"); });
+  window.scrollTo(0,0);
+  if (DB.settings.faultUrl) loadLive(e);
+  const ol = $("#openLock");
+  if (ol) ol.onclick = ev => { ev.preventDefault(); const s = $("#lockSec"); s.classList.remove("hidden"); s.classList.add("in"); s.scrollIntoView({behavior:"smooth", block:"center"}); setTimeout(()=>$("#lockPass").focus(), 300); };
+  const lf = $("#lockForm");
+  if (lf) lf.onsubmit = async ev => {
+    ev.preventDefault(); const p = $("#lockPass").value; const err = $("#lockErr");
+    if (!p) return; err.textContent = "Đang kiểm tra…";
+    try { UNLOCKED = await unlockData(DB.locked, p); rememberPass(p); renderHub(e.code, preview); }
+    catch(_){ err.textContent = window.crypto && crypto.subtle ? "Sai mật khẩu. Kiểm tra lại hoặc liên hệ trưởng kíp." : "Trình duyệt không hỗ trợ giải mã – mở trang bằng https."; $("#lockPass").select(); }
+  };
+  const rl = $("#relock"); if (rl) rl.onclick = ev => { ev.preventDefault(); forgetPass(); renderHub(e.code, preview); };
+  if (preview) $("#backAdmin").onclick = () => { hub.classList.add("hidden"); $("#admin").classList.remove("hidden"); document.title="PXNL – Thiết bị & Vật tư"; };
+}
+
+function loadLive(e){
+  const body = $("#liveBody"); if (!body) return;
+  sheetFeed().then(table => {
+    const all = parseFeed(table), rows = matchRows(all, e).reverse();
+    if (!rows.length){ body.innerHTML = `Chưa có bất thường nào khớp từ khóa <b>${esc(keywords(e).join(", "))}</b>.`; return; }
+    const open = rows.filter(r => !isDone(r.status));
+    const card = r => `<details class="fault"><summary><span style="flex:1">${esc(r.desc || r.sys)}</span>${isDone(r.status)?`<span class="pill ok">Xong</span>`:`<span class="pill warn">${esc(r.status||"Chưa xong")}</span>`}</summary><p>${[
+        r.time && `<b>Phát hiện:</b> ${esc(r.time)}${r.who?` · ${esc(r.who)}`:""}`,
+        r.sr && `<b>SR CMMS:</b> ${esc(r.sr)}`,
+        r.prog && `<b>Diễn biến:</b> ${esc(r.prog)}`,
+        r.cause && `<b>Nguyên nhân:</b> ${esc(r.cause)}`,
+        r.fix && `<b>Biện pháp xử lý:</b> ${esc(r.fix)}`].filter(Boolean).join("\n")}</p></details>`;
+    body.classList.remove("hint");
+    body.innerHTML = `<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px"><span class="pill ${open.length?"warn":"ok"}">${open.length} chưa hoàn thành</span><span class="pill" style="background:var(--soft);color:var(--blue)">${rows.length} lượt ghi nhận</span></div>` + rows.slice(0,20).map(card).join("")
+      + (rows.length>20?`<p class="hint">Hiển thị 20 lượt gần nhất. Xem đầy đủ trong sổ theo dõi.</p>`:"");
+  }).catch(() => { body.innerHTML = "Không tải được sổ theo dõi (điện thoại cần Internet và sổ phải chia sẻ “Bất kỳ ai có đường liên kết đều xem được”). Bấm ô “Sổ theo dõi bất thường” để mở trực tiếp."; });
+}
+
+/* ================= VẬT TƯ ================= */
+/* Bộ đọc Excel và mô hình dữ liệu dùng chung với trang "Tra cứu vật tư PXNL" (QuanlyvattuNL/index.html) */
+const XLSXR=(function(){
+  const td=new TextDecoder();
+  async function unzip(buf){
+    const u8=new Uint8Array(buf),dv=new DataView(buf);
+    let e=u8.length-22;while(e>=0&&dv.getUint32(e,true)!==0x06054b50)e--;
+    if(e<0)throw new Error('File không phải định dạng .xlsx');
+    const n=dv.getUint16(e+10,true);let p=dv.getUint32(e+16,true);const files={};
+    for(let i=0;i<n;i++){
+      const method=dv.getUint16(p+10,true),csize=dv.getUint32(p+20,true),nlen=dv.getUint16(p+28,true),elen=dv.getUint16(p+30,true),clen=dv.getUint16(p+32,true),off=dv.getUint32(p+42,true);
+      const name=td.decode(u8.subarray(p+46,p+46+nlen)).replace(/^\//,'');
+      files[name]={method,csize,off};p+=46+nlen+elen+clen;
+    }
+    async function text(name){
+      const f=files[name];if(!f)return null;
+      const s=f.off+30+dv.getUint16(f.off+26,true)+dv.getUint16(f.off+28,true);
+      const data=u8.subarray(s,s+f.csize);
+      if(f.method===0)return td.decode(data);
+      const out=await new Response(new Blob([data]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).arrayBuffer();
+      return td.decode(out);
+    }
+    return {text,names:Object.keys(files)};
+  }
+  const all=(el,tag)=>Array.from(el.getElementsByTagNameNS('*',tag));
+  const colIdx=ref=>{let n=0;for(const ch of ref){const c=ch.charCodeAt(0);if(c<65||c>90)break;n=n*26+(c-64);}return n-1;};
+  const rowIdx=ref=>+(ref.replace(/^[A-Z]+/,''))-1;
+  async function open(buf){
+    const z=await unzip(buf),P=new DOMParser();
+    const xml=async n=>{const t=await z.text(n);return t?P.parseFromString(t,'application/xml'):null;};
+    const wb=await xml('xl/workbook.xml');if(!wb)throw new Error('Thiếu xl/workbook.xml');
+    const rels=await xml('xl/_rels/workbook.xml.rels');const relMap={};
+    if(rels)all(rels,'Relationship').forEach(r=>{let t=r.getAttribute('Target');t=t.startsWith('/')?t.slice(1):'xl/'+t;relMap[r.getAttribute('Id')]=t;});
+    const sheets=all(wb,'sheet').map(s=>({name:s.getAttribute('name'),path:relMap[s.getAttribute('r:id')||s.getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships','id')]}));
+    let ss=null;
+    async function strings(){
+      if(ss)return ss;const d=await xml('xl/sharedStrings.xml');
+      ss=d?all(d,'si').map(si=>all(si,'t').filter(t=>t.parentNode.localName!=='rPh').map(t=>t.textContent).join('')):[];
+      return ss;
+    }
+    async function rows(name){
+      const sh=sheets.find(s=>s.name===name);if(!sh)return null;
+      const S=await strings();const d=await xml(sh.path);if(!d)return [];
+      const out=[];let rn=0;
+      for(const row of all(d,'row')){
+        const r=row.getAttribute('r')?(+row.getAttribute('r')-1):rn;rn=r+1;
+        const arr=out[r]=[];let cn=0;
+        for(const c of all(row,'c')){
+          const ref=c.getAttribute('r');const ci=ref?colIdx(ref):cn;cn=ci+1;
+          const t=c.getAttribute('t');const vEl=all(c,'v')[0];let v=null;
+          if(t==='s'){v=vEl?S[+vEl.textContent]:null;}
+          else if(t==='inlineStr'){v=all(c,'t').map(x=>x.textContent).join('');}
+          else if(t==='b'){v=vEl?(vEl.textContent==='1'?'TRUE':'FALSE'):null;}
+          else if(t==='str'||t==='e'){v=vEl?vEl.textContent:null;}
+          else if(vEl){const n=Number(vEl.textContent);v=isNaN(n)?vEl.textContent:n;}
+          arr[ci]=v;
+        }
+      }
+      for(const m of all(d,'mergeCell')){
+        const [a,b]=m.getAttribute('ref').split(':');if(!b)continue;
+        const r0=rowIdx(a),c0=colIdx(a),r1=rowIdx(b),c1=colIdx(b);
+        const v=out[r0]?out[r0][c0]:null;if(v==null)continue;
+        for(let r=r0;r<=r1;r++){if(!out[r])out[r]=[];for(let c=c0;c<=c1;c++)if(r!==r0||c!==c0)out[r][c]=v;}
+      }
+      for(let i=0;i<out.length;i++)if(!out[i])out[i]=[];
+      return out;
+    }
+    return {sheetNames:sheets.map(s=>s.name),rows};
+  }
+  return {open};
+})();
+
+// ===== Turning the three workbooks into the page's data model =====
+const MODEL=(function(){
+  const fl=s=>String(s??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[đĐ]/g,'d').toLowerCase().replace(/\s+/g,' ').trim();
+  const sv=v=>{if(v===null||v===undefined)return '';if(typeof v==='number'){return Number.isInteger(v)?String(v):String(+v.toFixed(6));}return String(v).trim();};
+  const num=v=>{const s=sv(v);if(s==='')return null;const n=Number(s);return isNaN(n)?s:n;};
+  const UNIT={pcs:'Pcs',PCS:'Pcs',Pcs:'Pcs',PC:'Pcs','cái':'Cái','CÁi':'Cái','Cái':'Cái',set:'Set',Set:'Set'};
+  const normKey=x=>String(x).normalize('NFC').toLowerCase().replace(/…/g,'').replace(/"/g,'').replace(/[\s,]+/g,' ').trim().replace(/^[ .:]+|[ .:]+$/g,'');
+
+  function fileKind(name,sheetNames){
+    const f=fl(name);
+    if(sheetNames.some(s=>/abc classification/i.test(s))||sheetNames.some(s=>fl(s)==='danh sach he thong'))return 'master';
+    if(/ton ?kho|tonkho/.test(f))return 'inv';
+    return null;
+  }
+  function masterLabel(name){
+    const f=fl(name).replace(/\s/g,'');
+    if(f.includes('mt+md')||f.includes('mtmd'))return 'MT+MĐ';
+    if(f.includes('dtd+kn')||f.includes('dtdkn'))return 'ĐTĐ+KN';
+    return name.replace(/\.xlsx$/i,'');
+  }
+  // ---- master sheet ----
+  function findCols(rows){
+    let h=-1;
+    for(let i=0;i<Math.min(rows.length,40);i++){if((rows[i]||[]).some(v=>fl(v)==='ma vat tu')){h=i;break;}}
+    if(h<0)throw new Error('Không tìm thấy dòng tiêu đề "Mã Vật tư"');
+    const H=rows[h].map(fl),H2=(rows[h+1]||[]).map(fl);const c={};
+    const find=(test,arr=H,from=0)=>{for(let i=from;i<arr.length;i++)if(arr[i]&&test(arr[i]))return i;return -1;};
+    c.code=find(s=>s==='ma vat tu');
+    c.sys=find(s=>s==='he thong');
+    c.sub=find(s=>s==='he thong 2');
+    c.name=find(s=>s.startsWith('thiet bi'));
+    c.model=find(s=>s.startsWith('mo ta'),H,Math.max(0,c.name));
+    c.spec=find(s=>s.startsWith('thong so ky thuat'));
+    c.sysSpare=find(s=>s.includes('du phong he thong'));
+    c.inst=find(s=>s.includes('so luong lap dat'));
+    c.mn=find(s=>s.includes('toi thieu'));
+    c.mx=find(s=>s.includes('toi da'));
+    c.unit=find(s=>s.startsWith('don vi'));
+    c.hist=find(s=>s.startsWith('tan suat'));
+    c.rep=find(s=>s.startsWith('repairable'));
+    c.oem=find(s=>s.startsWith('chinh hang'),H2);if(c.oem<0)c.oem=find(s=>s.startsWith('chinh hang'));
+    c.eq=find(s=>s.startsWith('tuong duong'),H2);
+    c.why=find(s=>s.startsWith('giai thich'),H2);
+    c.dwg=find(s=>s.startsWith('bang ve')||s.startsWith('ban ve'));
+    c.note=find(s=>s.startsWith('ghi chu'));
+    c.impact=find(s=>s.startsWith('anh huong'));
+    if(c.code<0||c.name<0)throw new Error('Thiếu cột "Mã Vật tư" hoặc "Thiết bị/Vật tư"');
+    // the ABC class sits in a column whose header does not say so: find it by its values
+    const cnt={};
+    for(let i=h+1;i<Math.min(rows.length,h+400);i++){const r=rows[i]||[];if(!sv(r[c.name]))continue;
+      r.forEach((v,j)=>{if(j>c.name&&/^(A1|A2|A3|B|C|D)$/.test(sv(v)))cnt[j]=(cnt[j]||0)+1;});}
+    let best=-1,bn=0;for(const j in cnt)if(cnt[j]>bn){bn=cnt[j];best=+j;}
+    c.cls=best;if(c.impact===c.cls)c.impact=-1;
+    return {h,c};
+  }
+  function codeLevel(c0){
+    const s=sv(c0).trim();if(!s)return null;
+    if(/^[IVX]+\.?$/.test(s))return 1;
+    if(/^\d+$/.test(s))return +s>1000?3:2;          // "1.0" is stored as 1; dates (wrongly typed "8.2") as big serials
+    if(/^\d+\.\d+$/.test(s))return /\.0$/.test(s)?2:3;
+    if(/^\d+\.\d+\.\d+/.test(s))return 4;
+    return null;
+  }
+  const MODEL_RE=/(?:order code|model|p\/n|part no\.?|part number|mã hiệu|type)\s*[:：]\s*([^\n;]+)/i;
+  function parseMaster(rows,label,defTeam){
+    const {h,c}=findCols(rows);const g=(r,k)=>c[k]>=0?sv(r[c[k]]):'';
+    const items=[];let team='',sec='',sys='';let path=[];
+    for(let i=h+1;i<rows.length;i++){
+      const r=rows[i]||[];
+      if(!r.some(v=>sv(v)!==''))continue;
+      const name=g(r,'name');
+      if(/^\d+$/.test(name)&&/^\d+$/.test(g(r,'code')))continue;
+      if(fl(g(r,'code'))==='ma vat tu')continue;
+      if(name===''){
+        const c0=sv(r[0]),c1=g(r,'code'),cs=g(r,'sys');
+        if(/^tổ\s/i.test(c1)){team=c1.replace(/^tổ\s+/i,'');continue;}
+        if(c0&&c1&&!cs){sec=c0;continue;}
+        if(cs){
+          const fc=fl(cs);
+          if(fc==='may tinh'||fc==='may dong'){team=fc==='may tinh'?'Máy tĩnh':'Máy động';path=[];sys='';continue;}
+          if(/^phan /.test(fc))continue;
+          const L=codeLevel(c0);
+          if(L===null){path=[cs.replace(/\s+/g,' ').trim()];}
+          else{path=path.slice(0,L-1);while(path.length<L-1)path.push('');path[L-1]=cs.replace(/\s+/g,' ').trim();}
+          sys=cs.replace(/\s+/g,' ').trim();continue;
+        }
+        continue;
+      }
+      let model=g(r,'model'),desc='';
+      if(model.length>50&&/\s/.test(model)){desc=model;model='';}
+      const spec=g(r,'spec');
+      if(!model){const m=MODEL_RE.exec(spec)||MODEL_RE.exec(desc);if(m)model=m[1].trim().slice(0,80);}
+      const own=g(r,'sys').replace(/\s+/g,' ').trim();
+      const impact=c.impact>=0?g(r,'impact'):'';const gnote=g(r,'note');
+      const it={code:g(r,'code'),sys:own||sys,sub:g(r,'sub'),name,model,desc,spec,
+        sysSpare:g(r,'sysSpare'),inst:num(r[c.inst]),mn:num(r[c.mn]),mx:c.mx>=0?num(r[c.mx]):null,unit:g(r,'unit'),
+        cls:(c.cls>=0?sv(r[c.cls]):'')||sec,hist:g(r,'hist'),rep:g(r,'rep'),oem:g(r,'oem')?'✓':'',eq:g(r,'eq')?'✓':'',
+        why:g(r,'why'),dwg:g(r,'dwg'),note:[impact,gnote].filter(Boolean).join('\n'),team:team||defTeam||label,src:label,row:i+1,
+        sysPath:path.filter(Boolean).length?path.filter(Boolean):(own?[own]:[]),hasSubCol:c.sub>=0};
+      if(!/^(A1|A2|A3|B|C|D)$/.test(it.cls)){const m=/^(A1|A2|A3|B|C|D)/.exec(it.cls);it.cls=m?m[1]:(it.cls==='A'?'A2':'C');}
+      if(/^\d+$/.test(it.code)===false&&/^(chưa có mã|chua co ma)$/i.test(it.code))it.code='';
+      it.unit=UNIT[it.unit]||it.unit;
+      if(it.dwg.length>60&&!/SH1-|DWG|PID/i.test(it.dwg)){it.why=(it.why+'\n'+it.dwg).trim();it.dwg='';}
+      const m=/2025[^\n]*?hỏng\s*(\d+)/i.exec(it.hist)||/hỏng\s*(\d+)/i.exec(it.hist);it.fail=m?+m[1]:0;
+      items.push(it);
+    }
+    return items;
+  }
+  // ---- "Danh sách hệ thống" sheet ----
+  function lvl(a){
+    if(/^[A-J]\.\s?M0\d|^[A-J]\.\s|^HỆ THỐNG CHỮA CHÁY/.test(a))return 0;
+    if(/^(I|II|III|IV|V|VI|VII)\./.test(a))return 1;
+    if(/^\d+\.\d+/.test(a))return 3;
+    if(/^\d+[\. ]/.test(a))return 2;
+    return null;
+  }
+  function parseTree(rows,acc){
+    let group=null;
+    const getGroup=title=>{let g=acc.groups.find(x=>normKey(x.title)===normKey(title));if(!g){g={title,items:[]};acc.groups.push(g);}return g;};
+    for(let i=1;i<rows.length;i++){
+      const r=rows[i]||[];const a=sv(r[0]),b=sv(r[1]),cc=sv(r[2]),d=sv(r[3]);
+      if(!a&&!b)continue;
+      const L=a?lvl(a):null;
+      if(a&&(L===0||L===1||(L!==null&&!b))){
+        if(L===0){group=getGroup(a);}
+        else{if(!group)group=getGroup('Khác');group.items.push({t:'h',l:L,x:a});}
+        if(!(b&&(L===0||L===1)))continue;
+      }
+      if(b){
+        const hdr=!!(a&&(L===0||L===1));let numL='';
+        if(a&&(L===2||L===3)){const m=/^([\d\.]+)\s*/.exec(a);numL=m?m[1].replace(/\.$/,''):'';}
+        const k=normKey(b);if(acc.byKey.has(k))continue;
+        const s={id:acc.subs.length,name:b,num:numL,dwg:cc?cc.replace(/\n/g,' | ').trim():'',sheetN:d,hdr};
+        acc.subs.push(s);acc.byKey.set(k,s.id);
+        if(!group)group=getGroup('Khác');
+        group.items.push({t:'s',id:s.id});
+      }
+    }
+  }
+  function csvSplit(s){
+    const out=[];let cur='',q=false;
+    for(const ch of s.replace(/\n/g,' ')){if(ch==='"'){q=!q;continue;}if(ch===','&&!q){out.push(cur);cur='';continue;}cur+=ch;}
+    out.push(cur);return out.map(x=>x.trim()).filter(Boolean);
+  }
+  // ---- inventory report ----
+  function parseInv(rows){
+    let h=-1;for(let i=0;i<Math.min(rows.length,30);i++){if((rows[i]||[]).some(v=>fl(v)==='ma vat tu')){h=i;break;}}
+    if(h<0)throw new Error('Không thấy dòng tiêu đề "Mã vật tư" trong báo cáo tồn kho');
+    const H=rows[h].map(fl);const f=t=>H.findIndex(x=>x&&t(x));
+    const c={code:f(s=>s==='ma vat tu'),name:f(s=>s.startsWith('ten vat tu')),bin:f(s=>s==='bin'),unit:f(s=>s==='dvt'||s.startsWith('don vi')),qty:f(s=>s.startsWith('so luong'))};
+    let date='';for(let i=0;i<h;i++){const t=(rows[i]||[]).map(sv).join(' ');const m=/Ngày:\s*([\d\/\.\-]+)/i.exec(t);if(m)date=m[1];}
+    const inv=[];let kho='';
+    for(let i=h+1;i<rows.length;i++){
+      const r=rows[i]||[];const a=sv(r[0]);
+      if(/^kho\b/i.test(a)&&!sv(r[c.code])){kho=a.replace(/^kho:\s*/i,'').replace(/\s+/g,' ').trim();continue;}
+      const code=sv(r[c.code]);if(!code)continue;
+      const q=num(r[c.qty]);
+      inv.push({code,name:sv(r[c.name]),bin:c.bin>=0?sv(r[c.bin]):'',unit:c.unit>=0?sv(r[c.unit]):'',qty:typeof q==='number'?q:0,kho,row:i+1});
+    }
+    return {inv,date};
+  }
+  // ---- build everything from a list of {name,lastModified,buf} ----
+  async function build(files,log){
+    const masters=[],invs=[];const notes=[];
+    // find every sheet that looks like a material list (has "Mã Vật tư" and "Thiết bị" headers)
+    async function masterSheets(wb){
+      const out=[];
+      for(const s of wb.sheetNames){
+        if(fl(s)==='danh sach he thong')continue;
+        const r=await wb.rows(s);if(!r)continue;
+        for(let i=0;i<Math.min(r.length,40);i++){const row=(r[i]||[]).map(fl);
+          if(row.includes('ma vat tu')&&row.some(v=>v&&v.startsWith('thiet bi'))){out.push({name:s,rows:r});break;}}
+      }
+      return out;
+    }
+    for(const f of files){
+      if(/^~\$/.test(f.name)||!/\.xlsx$/i.test(f.name))continue;
+      let wb;try{wb=await XLSXR.open(f.buf);}catch(e){notes.push(`Bỏ qua ${f.name}: ${e.message}`);continue;}
+      const nm=fl(f.name);
+      if(/ton ?kho|tonkho/.test(nm)){invs.push({f,wb});continue;}
+      let ms=[];try{ms=await masterSheets(wb);}catch(e){notes.push(`Không đọc được ${f.name}: ${e.message}`);continue;}
+      if(ms.length){masters.push({f,wb,ms});continue;}
+      const r=await wb.rows(wb.sheetNames[0]);const top=(r||[]).slice(0,6).flat().map(fl).join(' ');
+      if(top.includes('ton kho')){invs.push({f,wb});continue;}
+      notes.push(`Bỏ qua ${f.name}: không thấy sheet nào có cột "Mã Vật tư" và "Thiết bị/Vật tư"`);
+    }
+    if(!masters.length)throw new Error('Không tìm thấy file "DANH SÁCH VẬT TƯ MASTER" trong các file đã chọn'+(notes.length?' ('+notes.join('; ')+')':''));
+    masters.sort((a,b)=>{const o=x=>masterLabel(x.f.name)==='ĐTĐ+KN'?0:1;return o(a)-o(b)||a.f.name.localeCompare(b.f.name);});
+    const acc={groups:[],subs:[],byKey:new Map()};let DATA=[];const meta={files:[],built:Date.now(),notes};
+    for(const {f,wb,ms} of masters){
+      const label=masterLabel(f.name);let count=0;
+      for(const sh of ms){
+        try{
+          const classLike=/^\s*(abc|a1|a2|a3|b|c|d)\b/i.test(sh.name);
+          const items=parseMaster(sh.rows,label,ms.length>1&&!classLike?sh.name.trim():label);
+          items.forEach(it=>{it.src=label;it.sheet=sh.name.trim();});
+          DATA=DATA.concat(items);count+=items.length;
+        }catch(e){notes.push(`${f.name} – sheet "${sh.name}": ${e.message}`);}
+      }
+      const tName=wb.sheetNames.find(s=>fl(s)==='danh sach he thong')||wb.sheetNames.find(s=>fl(s).includes('danh sach he thong'));
+      if(tName){try{parseTree(await wb.rows(tName),acc);}catch(e){notes.push(`${f.name} – sheet "${tName}": ${e.message}`);}}
+      meta.files.push({kind:'master',label,name:f.name,modified:f.lastModified,count,sheet:ms.map(x=>x.name).join(', ')});
+    }
+    // subsystem matching on "Hệ thống 2"
+    const keys=[...acc.byKey.keys()];const unmatched={};
+    for(const it of DATA){
+      const parts=it.sub?csvSplit(it.sub):[];const ids=new Set();
+      for(const p of parts){const k=normKey(p);if(!k)continue;
+        if(acc.byKey.has(k)){ids.add(acc.byKey.get(k));continue;}
+        const cand=keys.filter(kk=>k.startsWith(kk)||kk.startsWith(k));
+        if(cand.length){ids.add(acc.byKey.get(cand.sort((a,b)=>b.length-a.length)[0]));continue;}
+        unmatched[p]=(unmatched[p]||0)+1;}
+      it.subs=[...ids].sort((a,b)=>a-b);it.subRaw=parts;
+    }
+    // files without a "Hệ thống 2" column: use their own system hierarchy as subsystem keywords
+    const extra=new Map();
+    for(const it of DATA){
+      if(it.hasSubCol||it.subs.length||!it.sysPath||!it.sysPath.length)continue;
+      const p=it.sysPath;let id=null;
+      for(let k=p.length-1;k>=(p.length>1?1:0)&&id===null;k--){const key=normKey(p[k]);if(key&&acc.byKey.has(key)&&!acc.subs[acc.byKey.get(key)].hdr)id=acc.byKey.get(key);}
+      if(id===null){
+        const top=p[0],leafName=p.length>=3?p[1]+' › '+p[2]:(p.length===2?p[1]:p[0]);
+        const key=normKey(leafName);
+        if(acc.byKey.has(key))id=acc.byKey.get(key);
+        else{
+          const gTitle='MÁY TĨNH · MÁY ĐỘNG ('+it.src+')';
+          let g=acc.groups.find(x=>x.title===gTitle);if(!g){g={title:gTitle,items:[]};acc.groups.push(g);}
+          const hk=gTitle+'|'+top;if(!extra.has(hk)){extra.set(hk,true);if(p.length>1)g.items.push({t:'h',l:1,x:top});}
+          const s={id:acc.subs.length,name:leafName,num:'',dwg:'',sheetN:'',hdr:false,auto:true};
+          acc.subs.push(s);acc.byKey.set(key,s.id);
+          // keep leaves grouped under their top heading
+          const hi=g.items.findIndex(n=>n.t==='h'&&n.x===top);
+          if(hi<0)g.items.push({t:'s',id:s.id});
+          else{let j=hi+1;while(j<g.items.length&&g.items[j].t==='s')j++;g.items.splice(j,0,{t:'s',id:s.id});}
+          id=s.id;
+        }
+      }
+      it.subs=[id];
+    }
+    acc.subs.forEach(s=>s.n=DATA.filter(d=>d.subs.includes(s.id)).length);
+    meta.unmatched=unmatched;
+    // inventory
+    let INV=[];
+    if(invs.length){
+      invs.sort((a,b)=>b.f.lastModified-a.f.lastModified);
+      const {f,wb}=invs[0];const p=parseInv(await wb.rows(wb.sheetNames[0]));INV=p.inv;
+      meta.files.push({kind:'inv',label:'Tồn kho',name:f.name,modified:f.lastModified,count:INV.length,date:p.date});
+    }
+    const byc=new Map();INV.forEach((x,k)=>{if(!byc.has(x.code))byc.set(x.code,[]);byc.get(x.code).push(k);});
+    const comp=z=>String(z).toLowerCase().replace(/[^a-z0-9]/g,'');
+    const invc=INV.map(x=>comp(x.name));
+    for(const it of DATA){
+      it.inv=it.code&&byc.has(it.code)?byc.get(it.code):[];it.invSug=[];
+      if(!it.inv.length&&it.model){
+        const mods=it.model.split(/\n|;/).map(comp).filter(p=>p.length>=8);const hits=new Set();
+        for(const p of mods)invc.forEach((c,k)=>{if(c.includes(p))hits.add(k);});
+        if(hits.size&&hits.size<=6)it.invSug=[...hits].sort((a,b)=>a-b);
+      }
+      it.stock=it.inv.reduce((a,k)=>a+(+INV[k].qty||0),0);
+    }
+    return {DATA,TREE:{groups:acc.groups,subs:acc.subs},INV,meta};
+  }
+  return {build,fl};
+})();
+const foldv = s => String(s ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[đĐ]/g,"d").toLowerCase().replace(/\s+/g," ").trim();
+let VT = null, VTMAP = null;
+const vtSrc = {handle:null, busy:false};
+const STKL = {ok:"Đủ tồn", low:"Dưới min", zero:"Tồn 0", none:"Không có trong kho", nocode:"Chưa có mã"};
+const CLS_ORDER = {A1:0,A2:1,A3:2,B:3,C:4,D:5};
+const HDB = {
+  db(){ return new Promise((res,rej)=>{ const r=indexedDB.open("pxnl-hub",1); r.onupgradeneeded=()=>r.result.createObjectStore("kv"); r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error); }); },
+  async get(k){ try{ const d=await this.db(); return await new Promise(res=>{ const q=d.transaction("kv").objectStore("kv").get(k); q.onsuccess=()=>res(q.result); q.onerror=()=>res(undefined); }); }catch(e){ return undefined; } },
+  async set(k,v){ try{ const d=await this.db(); await new Promise(res=>{ const tx=d.transaction("kv","readwrite"); tx.objectStore("kv").put(v,k); tx.oncomplete=res; tx.onerror=res; }); }catch(e){} }
+};
+function stockOf(d){
+  if (!d.code || !/^\d/.test(d.code)) return "nocode";
+  if (!d.inv || !d.inv.length) return "none";
+  if (!d.stock) return "zero";
+  if (d.mn != null && !isNaN(+d.mn) && d.stock < +d.mn) return "low";
+  return "ok";
+}
+function vtText(d){ return d._t || (d._t = foldv([d.sys, d.sub, (d.sysPath||[]).join(" / "), (d.subRaw||[]).join(" / "), d.name].join(" | "))); }
+/* Quy tắc khớp vật tư ↔ thiết bị theo mã TB; có thể bổ sung từ khóa riêng ở từng thiết bị */
+function vtRule(e){
+  const c = (e.code||"").toUpperCase(), extra = (e.vtKey||"").split(/[,;]/).map(foldv).filter(Boolean);
+  const any = (t, arr) => arr.some(k => t.includes(k));
+  const nums = t => { const out = new Set(); const re = /(?:\bbc|conve?n?yor|bang tai)[^a-z0-9]{0,3}((?:\d{2}(?:\s*(?:[,/&-]|va|and)\s*)?)+)/g; let m;
+    while ((m = re.exec(t))) { const s = m[1]; const rng = s.match(/(\d{2})\s*-\s*(\d{2})/); if (rng) for (let i=+rng[1]; i<=+rng[2]; i++) out.add(String(i)); (s.match(/\d{2}/g)||[]).forEach(n=>out.add(n)); }
+    return out; };
+  return t => {
+    if (extra.length && any(t, extra)) return "riêng";
+    if (/^CSU/.test(c)) return /\bcsu\b|coal jetty|ship ?unloader|bucket elevator/.test(t) ? "riêng" : "";
+    if (/^SR/.test(c)) return (/\bsr\b|stacker|reclam|relaimer/.test(t) && !/fgd reclaimer|limestone|limstone|gypsum/.test(t)) ? "riêng" : "";
+    if (/^BC/.test(c)) { const n = c.slice(2); const ns = nums(t); if (ns.has(n)) return "riêng"; if (!ns.size && /conveyor system|bang tai than|conveyor belt/.test(t)) return "chung"; return ""; }
+    if (/^TC/.test(c)) return /trip+er/.test(t) ? "riêng" : "";
+    return "";
+  };
+}
+function buildVtMap(){
+  VTMAP = {};
+  if (!VT) return VTMAP;
+  DB.equipment.forEach(e => {
+    const f = vtRule(e), hits = [];
+    VT.DATA.forEach((d,i) => { const k = f(vtText(d)); if (k) hits.push([i,k]); });
+    hits.sort((a,b)=> (a[1]===b[1]?0:a[1]==="riêng"?-1:1) || (CLS_ORDER[VT.DATA[a[0]].cls]??9) - (CLS_ORDER[VT.DATA[b[0]].cls]??9));
+    VTMAP[e.code] = hits;
+  });
+  VT.DATA.forEach(d => d._eq = []);
+  Object.entries(VTMAP).forEach(([code,h]) => h.forEach(([i]) => VT.DATA[i]._eq.push(code)));
+  return VTMAP;
+}
+function vtFor(e){ if (!VT) return []; if (!VTMAP) buildVtMap(); return (VTMAP[e.code]||[]).map(([i,k]) => Object.assign({_k:k}, VT.DATA[i])); }
+function invLines(d){ return (d.inv||[]).map(k => VT.INV[k]).filter(Boolean).map(x => ({kho:x.kho, bin:x.bin, qty:x.qty, unit:x.unit})); }
+function vtCompact(e){ return vtFor(e).slice(0,80).map(d => ({c:d.code, n:d.name, m:d.model, u:d.unit, s:d.stock||0, mn:d.mn, cl:d.cls, st:stockOf(d), k:d._k, b:invLines(d).map(x=>[x.kho.split(" - ")[0], x.bin, x.qty])})); }
+async function vtLoad(model, origin){
+  model.DATA.forEach(d => { d.code = String(d.code||""); d.inv = d.inv||[]; d.stock = d.stock||0; });
+  VT = model; VTMAP = null; buildVtMap();
+  if (origin !== "cache") await HDB.set("vt", model);
+  vtStatus(origin);
+  if (tab === "vattu") renderVt();
+  if (tab === "edit") renderEqVt();
+}
+function vtStatus(origin){
+  const m = VT && VT.meta || {files:[]};
+  const inv = (m.files||[]).find(f=>f.kind==="inv");
+  $("#vtMsg").innerHTML = VT ? `Đã nạp ${nf(VT.DATA.length)} vật tư Master · ${nf(VT.INV.length)} dòng tồn kho${inv&&inv.date?` (báo cáo ngày ${esc(inv.date)})`:""} · đọc lúc ${new Date(m.built||Date.now()).toLocaleString("vi-VN")}${origin==="cache"?" · bản lưu trên máy":""}` : "Chưa có dữ liệu vật tư.";
+  $("#vtFiles").innerHTML = VT ? (m.files||[]).map(f=>`📄 ${esc(f.name)} — ${nf(f.count)} dòng`).join("<br>") + ((m.notes||[]).length?`<br>⚠ ${m.notes.map(esc).join("; ")}`:"") : "";
+  $("#vtDir").textContent = vtSrc.handle ? "Cập nhật dữ liệu mới nhất" : "Kết nối thư mục vật tư";
+}
+const nf = n => Number(n||0).toLocaleString("vi-VN");
+async function vtReadFiles(list, origin){
+  if (vtSrc.busy) return; vtSrc.busy = true;
+  try {
+    $("#vtMsg").textContent = `Đang đọc ${list.length} file Excel…`;
+    const files = []; for (const f of list) files.push({name:f.name, lastModified:f.lastModified, buf: await f.arrayBuffer()});
+    const model = await MODEL.build(files);
+    model.meta.sig = list.map(f=>`${f.name}|${f.lastModified}|${f.size}`).sort().join("\n");
+    await vtLoad(model, origin); toast("Đã cập nhật dữ liệu vật tư");
+  } catch(e){ $("#vtMsg").textContent = "Lỗi đọc Excel: " + e.message; toast("Lỗi đọc Excel: " + e.message); }
+  finally { vtSrc.busy = false; }
+}
+async function vtListDir(h){ const out=[]; for await (const [name,en] of h.entries()) { if (en.kind!=="file" || !/\.xlsx$/i.test(name) || /^~\$/.test(name)) continue; out.push(await en.getFile()); } return out; }
+async function vtRefresh(ask, force){
+  const h = vtSrc.handle; if (!h) return;
+  let p = "prompt"; try { p = await h.queryPermission({mode:"read"}); } catch(_){}
+  if (p !== "granted" && ask) { try { p = await h.requestPermission({mode:"read"}); } catch(_){} }
+  if (p !== "granted") { $("#vtDir").textContent = "Cập nhật dữ liệu mới nhất"; $("#vtDir").classList.add("pulse"); return; }
+  $("#vtDir").classList.remove("pulse");
+  const list = await vtListDir(h);
+  const sig = list.map(f=>`${f.name}|${f.lastModified}|${f.size}`).sort().join("\n");
+  if (!force && VT && VT.meta && VT.meta.sig === sig) { vtStatus("folder"); return; }
+  await vtReadFiles(list, "folder");
+}
+async function vtInit(){
+  const cached = await HDB.get("vt"); if (cached && cached.DATA) await vtLoad(cached, "cache");
+  if (typeof window.showDirectoryPicker !== "function") { $("#vtDir").classList.add("hidden"); if(!VT) $("#vtMsg").textContent = "Trình duyệt này không kết nối thư mục được – dùng Chrome/Edge, hoặc bấm “Chọn file Excel”."; return; }
+  vtSrc.handle = await HDB.get("dir") || null; vtStatus(VT ? "cache" : "");
+  if (vtSrc.handle) await vtRefresh(false, false);
+  const tick = () => { if (document.visibilityState==="visible" && vtSrc.handle && !vtSrc.busy) vtRefresh(false,false); };
+  window.addEventListener("focus", tick); setInterval(tick, 5*60*1000);
+}
+function vtRows(){
+  if (!VT) return [];
+  if (!VTMAP) buildVtMap();
+  const q = foldv($("#vtQ").value), scope = $("#vtScope").value, eq = $("#vtEq").value, cl = $("#vtCls").value, sk = $("#vtStk").value;
+  let rows = VT.DATA;
+  if (eq) rows = vtFor(DB.equipment.find(e=>e.code===eq) || {});
+  else if (scope === "fuel") rows = rows.filter(d => d._eq && d._eq.length);
+  if (cl) rows = rows.filter(d => d.cls === cl);
+  if (sk) rows = rows.filter(d => stockOf(d) === sk);
+  if (q) { const ws = q.split(" ").filter(Boolean); rows = rows.filter(d => { const t = d._q || (d._q = foldv([d.code,d.name,d.model,d.spec,d.sys,d.sub,(d.sysPath||[]).join(" ")].join(" "))); return ws.every(w => t.includes(w)); }); }
+  return rows;
+}
+let vtLimit = 200;
+function renderVt(){
+  const eqSel = $("#vtEq"); const cur = eqSel.value;
+  eqSel.innerHTML = `<option value="">Tất cả</option>` + DB.equipment.map(e=>`<option ${e.code===cur?"selected":""}>${esc(e.code)}</option>`).join("");
+  const body = $("#vtBody");
+  if (!VT) { $("#vtKpis").innerHTML = ""; body.innerHTML = `<tr><td colspan="8" class="vt-empty">Bấm <b>Kết nối thư mục vật tư</b> và chọn thư mục <b>QuanlyvattuNL</b> trong OneDrive để nạp dữ liệu.</td></tr>`; $("#vtMore").textContent = ""; return; }
+  if (!VTMAP) buildVtMap();
+  const fuel = VT.DATA.filter(d => d._eq && d._eq.length);
+  const cnt = s => fuel.filter(d => stockOf(d) === s).length;
+  $("#vtKpis").innerHTML = `<div class="kpi"><b>${nf(VT.DATA.length)}</b><span>vật tư Master toàn PXNL</span></div>
+    <div class="kpi"><b>${nf(fuel.length)}</b><span>vật tư cho thiết bị nhiên liệu</span></div>
+    <div class="kpi ok"><b>${nf(cnt("ok"))}</b><span>đủ tồn kho</span></div>
+    <div class="kpi warn"><b>${nf(cnt("low"))}</b><span>dưới mức min</span></div>
+    <div class="kpi bad"><b>${nf(cnt("zero")+cnt("none"))}</b><span>hết hoặc không có trong kho</span></div>
+    <div class="kpi"><b>${nf(VT.INV.length)}</b><span>dòng tồn kho</span></div>`;
+  const rows = vtRows();
+  body.innerHTML = rows.slice(0, vtLimit).map(d => { const s = stockOf(d); return `<tr class="click" data-c="${esc(d.code)}" data-r="${d.row}|${esc(d.src)}">
+    <td class="mono">${esc(d.code||"—")}</td><td><b>${esc(d.name)}</b>${d.model?`<br><span class="mono" style="color:var(--muted)">${esc(d.model)}</span>`:""}</td>
+    <td>${esc((d.sysPath||[]).slice(-1)[0] || d.sys || "")}${d.sub?`<br><small style="color:var(--muted)">${esc(d.sub)}</small>`:""}</td>
+    <td><span class="cls ${esc(d.cls)}">${esc(d.cls)}</span></td>
+    <td class="num"><span class="stk ${s}" title="${STKL[s]}">${s==="nocode"||s==="none"?"—":nf(d.stock)}</span></td>
+    <td class="num">${d.mn??""}</td><td>${esc(d.unit||"")}</td>
+    <td>${(d._eq||[]).slice(0,6).map(c=>`<span class="eqchip">${esc(c)}</span>`).join("")}${(d._eq||[]).length>6?`<span class="eqchip">+${d._eq.length-6}</span>`:""}</td></tr>`; }).join("")
+    || `<tr><td colspan="8" class="vt-empty">Không có vật tư phù hợp bộ lọc.</td></tr>`;
+  $("#vtMore").innerHTML = rows.length > vtLimit ? `Hiển thị ${nf(vtLimit)}/${nf(rows.length)} dòng. <a href="#" id="vtMoreBtn">Xem thêm</a>` : `${nf(rows.length)} dòng.`;
+  const mb = $("#vtMoreBtn"); if (mb) mb.onclick = ev => { ev.preventDefault(); vtLimit += 300; renderVt(); };
+  $$("#vtBody tr.click").forEach(tr => tr.onclick = () => { const [row,src] = tr.dataset.r.split("|"); const d = VT.DATA.find(x => String(x.row)===row && x.src===src && x.code===tr.dataset.c); if (d) vtDetail(d); });
+}
+function vtDetail(d){
+  const s = stockOf(d), inv = invLines(d);
+  $("#dlgVtBody").innerHTML = `<h2>${esc(d.name)}</h2>
+    <p class="hint" style="margin-top:0"><span class="mono">${esc(d.code||"Chưa có mã")}</span> · <span class="cls ${esc(d.cls)}">${esc(d.cls)}</span> · ${esc((d.sysPath||[]).join(" › ") || d.sys)} · nguồn ${esc(d.src)} / ${esc(d.sheet||"")} dòng ${d.row}</p>
+    <div class="kpis" style="margin:10px 0"><div class="kpi"><b class="stk ${s}">${s==="none"||s==="nocode"?"—":nf(d.stock)}</b><span>Tồn kho · ${STKL[s]}</span></div><div class="kpi"><b>${d.mn??"—"}</b><span>Min</span></div><div class="kpi"><b>${d.mx??"—"}</b><span>Max</span></div><div class="kpi"><b>${d.inst??"—"}</b><span>SL lắp đặt</span></div></div>
+    ${inv.length?`<table class="t" style="margin-bottom:12px"><tr><th>Kho</th><th>Vị trí (Bin)</th><th style="text-align:right">SL</th></tr>${inv.map(x=>`<tr><td>${esc(x.kho)}</td><td>${esc(x.bin||"")}</td><td style="text-align:right">${nf(x.qty)} ${esc(x.unit||"")}</td></tr>`).join("")}</table>`:""}
+    ${d.model?`<p><b>Model:</b> <span class="mono">${esc(d.model)}</span></p>`:""}
+    ${d.spec?`<p style="white-space:pre-line;font-size:13px"><b>Thông số:</b>\n${esc(d.spec)}</p>`:""}
+    ${d.note?`<p style="white-space:pre-line;font-size:13px"><b>Ảnh hưởng / ghi chú:</b>\n${esc(d.note)}</p>`:""}
+    ${(d._eq||[]).length?`<p><b>Thiết bị:</b> ${d._eq.map(c=>`<span class="eqchip">${esc(c)}</span>`).join("")}</p>`:""}
+    <div class="acts"><button class="btn" data-close>Đóng</button></div>`;
+  $("#dlgVtBody [data-close]").onclick = () => $("#dlgVt").close();
+  $("#dlgVt").showModal();
+}
+function renderEqVt(){
+  const box = $("#eqVt"), n = $("#eqVtN"); if (!box) return;
+  const e = DB.equipment[cur]; if (!e) return;
+  if (!VT) { n.textContent = "chưa nạp"; box.innerHTML = `<p class="hint" style="margin:0">Vào tab <b>Vật tư</b> → Kết nối thư mục QuanlyvattuNL để hiện vật tư dự phòng của thiết bị này.</p>`; return; }
+  const list = vtFor(e); const own = list.filter(d=>d._k==="riêng").length;
+  n.textContent = `${list.length} vật tư · ${own} riêng`;
+  box.innerHTML = list.slice(0,40).map(d => { const s = stockOf(d); return `<div class="it"><span class="cls ${esc(d.cls)}">${esc(d.cls)}</span><div class="nm"><b>${esc(d.name)}</b><small><span class="mono">${esc(d.code||"Chưa có mã")}</span>${d.model?` · ${esc(d.model)}`:""}${d._k==="chung"?" · dùng chung băng tải":""}</small></div><div class="q"><span class="stk ${s}">${s==="none"||s==="nocode"?"—":nf(d.stock)+" "+esc(d.unit||"")}</span><br><small style="color:var(--muted)">${STKL[s]}${d.mn!=null?` · min ${d.mn}`:""}</small></div></div>`; }).join("")
+    + (list.length > 40 ? `<p class="hint">… và ${list.length-40} vật tư khác. <a href="#" id="eqVtAll">Xem tất cả trong tab Vật tư</a></p>` : "")
+    || `<p class="hint" style="margin:0">Không tìm thấy vật tư khớp. Thêm từ khóa ở ô trên (VD tên cụm thiết bị như trong file Master).</p>`;
+  const a = $("#eqVtAll"); if (a) a.onclick = ev => { ev.preventDefault(); setTab("vattu"); $("#vtEq").value = e.code; renderVt(); };
+}
+function hubVtHtml(e, locked, sec){
+  let items;
+  if (locked) { if (!sec || !sec.vt || !sec.vt.length) return ""; items = sec.vt; }
+  else { if (!VT) return ""; items = vtCompact(e); }
+  if (!items.length) return "";
+  const low = items.filter(x => x.st==="low"||x.st==="zero"||x.st==="none").length;
+  return `<div class="sec reveal"><h3>Vật tư dự phòng</h3>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px"><span class="pill" style="background:var(--soft);color:var(--blue)">${items.length} mã vật tư</span>${low?`<span class="pill warn">${low} thiếu / hết tồn</span>`:""}</div>
+    ${(()=>{ const row = x => `<div class="it"><span class="cls ${esc(x.cl)}">${esc(x.cl)}</span><div class="nm"><b>${esc(x.n)}</b><small><span class="mono">${esc(x.c||"Chưa có mã")}</span>${x.m?` · ${esc(x.m)}`:""}${x.b&&x.b.length?` · ${x.b.map(b=>esc(b[1]||b[0])).join(", ")}`:""}</small></div><div class="q"><span class="stk ${x.st}">${x.st==="none"||x.st==="nocode"?"—":nf(x.s)+" "+esc(x.u||"")}</span><br><small style="color:var(--muted)">${STKL[x.st]}</small></div></div>`;
+      const top = items.slice(0,10), rest = items.slice(10);
+      return `<div class="vtlist">${top.map(row).join("")}</div>` + (rest.length ? `<details style="margin-top:6px"><summary style="cursor:pointer;color:var(--blue);font-weight:600;font-size:13.5px">Xem thêm ${rest.length} vật tư</summary><div class="vtlist">${rest.map(row).join("")}</div></details>` : ""); })()}</div>`;
+}
+function vtBind(){
+  ["vtQ","vtScope","vtEq","vtCls","vtStk"].forEach(id => { $("#"+id).oninput = $("#"+id).onchange = () => { vtLimit = 200; renderVt(); }; });
+  $("#vtDir").onclick = async () => {
+    if (vtSrc.handle) { await vtRefresh(true, true); return; }
+    try { const h = await window.showDirectoryPicker({id:"pxnl-vattu", mode:"read"}); vtSrc.handle = h; await HDB.set("dir", h); await vtRefresh(true, true); }
+    catch(e){ if (e.name !== "AbortError") toast("Không mở được thư mục: " + e.message); }
+  };
+  $("#vtDir").oncontextmenu = ev => { ev.preventDefault(); vtSrc.handle = null; HDB.set("dir", null); vtStatus(); toast("Đã bỏ kết nối thư mục"); };
+  $("#vtPick").onchange = async ev => { const fs = [...ev.target.files]; ev.target.value = ""; if (fs.length) await vtReadFiles(fs, "pick"); };
+  const full = safeUrl(DB.settings.vtUrl); if (full) $("#vtFull").href = full;
+  vtInit();
+}
+
+/* ================= ADMIN ================= */
+let cur = 0, tab = "edit";
+function initAdmin(){
+  $("#admin").classList.remove("hidden");
+  $$(".tab").forEach(b => b.onclick = () => setTab(b.dataset.tab));
+  $("#q").oninput = renderList;
+  $("#addEq").onclick = () => {
+    let i = DB.equipment.length + 1, code;
+    do { code = "TB-" + String(i++).padStart(2,"0"); } while (DB.equipment.some(e=>e.code===code));
+    DB.equipment.push(blankEq(code, "Thiết bị mới")); cur = DB.equipment.length-1; save(); setTab("edit"); renderList(); renderEdit();
+    setTimeout(()=>{ const i=$('[data-k="code"]'); i&&i.select(); },30);
+  };
+  $("#pasteXls").onclick = () => $("#dlgPaste").showModal();
+  $$("[data-close]").forEach(b => b.onclick = () => b.closest("dialog").close());
+  $("#doPaste").onclick = importPaste;
+  $("#exportHtml").onclick = exportHtml;
+  $("#exportPublic").onclick = exportPublic;
+  $("#dlJson").onclick = () => download(`hoso-thietbi-${stamp()}.json`, JSON.stringify(DB,null,2), "application/json");
+  $("#upJson").onchange = ev => { const f = ev.target.files[0]; if(!f) return; f.text().then(t=>{ try{ const d=JSON.parse(t); if(!d.equipment) throw 0; DB=d; save(); renderAll(); toast("Đã khôi phục dữ liệu"); }catch(_){ toast("File không đúng định dạng"); } }); };
+  $("#resetAll").onclick = () => { if (confirm("Xóa dữ liệu đã sửa trên máy này và quay về dữ liệu gốc trong file?")) { try{localStorage.removeItem(LS_KEY);}catch(e){} location.reload(); } };
+  $$("[data-s]").forEach(inp => { inp.value = DB.settings[inp.dataset.s] ?? ""; inp.oninput = inp.onchange = () => { DB.settings[inp.dataset.s] = inp.value; save(); renderList(); picked = null; }; });
+  $("#lblSize").onchange = renderLabels;
+  $("#selAll").onclick = () => { $$("#lblChecks input").forEach(c=>c.checked=true); renderLabels(); };
+  $("#selNone").onclick = () => { $$("#lblChecks input").forEach(c=>c.checked=false); renderLabels(); };
+  $("#doPrint").onclick = () => window.print();
+  vtBind();
+  renderAll();
+}
+function renderAll(){ renderList(); renderEdit(); if(tab==="labels") renderLabelsTab(); }
+function setTab(t){
+  tab = t;
+  $$(".tab").forEach(b => b.classList.toggle("on", b.dataset.tab===t));
+  ["edit","settings","labels","vattu","guide"].forEach(x => $("#tab-"+x).classList.toggle("hidden", x!==t));
+  $("#pageTitle").textContent = {edit:"Thiết bị",settings:"Cài đặt chung",labels:"In tem QR",vattu:"Vật tư",guide:"Hướng dẫn triển khai"}[t];
+  if (t==="vattu") renderVt();
+  if (t==="edit") renderEdit();
+  if (t==="labels") renderLabelsTab();
+}
+function blankEq(code,name){ return {code,name,kks:"",match:"",vtKey:"",area:"",maker:"",model:"",year:"",owner:"",hubUrl:"",docUrl:"",formUrl:"",faultUrl:"",histUrl:"",planUrl:"",warning:"",specs:[],docs:[],faults:[]}; }
+
+function renderList(){
+  const q = ($("#q").value||"").toLowerCase().trim();
+  const groups = {};
+  DB.equipment.forEach((e,i) => {
+    if (q && !(e.code+" "+e.name).toLowerCase().includes(q)) return;
+    (groups[e.area||"Chưa phân khu vực"] ||= []).push([e,i]);
+  });
+  $("#elist").innerHTML = Object.entries(groups).map(([g,items]) =>
+    `<div class="egroup">${esc(g)}</div>` + items.map(([e,i]) =>
+      `<button class="eitem ${i===cur&&tab==="edit"?"active":""}" data-i="${i}" title="${targetUrl(e)?"Đã có đích QR":"Chưa có đích QR"}"><span class="code">${esc(e.code)}</span><span class="nm">${esc(e.name)}</span><span class="dot ${targetUrl(e)?"ok":""}"></span></button>`).join("")
+  ).join("") || `<div class="egroup">Không có kết quả</div>`;
+  $$(".eitem").forEach(b => b.onclick = () => { cur = +b.dataset.i; setTab("edit"); renderList(); });
+}
+
+function renderEdit(){
+  const box = $("#tab-edit");
+  const e = DB.equipment[cur];
+  if (!e){ box.innerHTML = `<div class="card">Chưa có thiết bị. Bấm “+ Thêm thiết bị” hoặc “Dán danh mục từ Excel”.</div>`; return; }
+  const F = (k,label,ph="",cls="") => `<div class="f ${cls}"><label>${label}</label><input data-k="${k}" value="${esc(e[k])}" placeholder="${esc(ph)}"></div>`;
+  box.innerHTML = `
+  <div class="grid2">
+    <div>
+      <div class="card">
+        <h2>Thông tin thiết bị</h2>
+        <div class="fields">
+          ${F("code","Mã thiết bị (duy nhất)")}
+          ${F("name","Tên thiết bị","", "full")}
+          ${F("area","Khu vực")}
+          ${F("kks","Mã KKS / Asset Maximo","VD: P0EAA01")}
+          ${F("match","Từ khóa lọc sổ bất thường","VD: CSU01, CSU 01, P0EAA01")}
+          ${F("maker","Nhà chế tạo")}
+          ${F("model","Model / Số serial")}
+          ${F("year","Năm đưa vào vận hành")}
+          ${F("owner","Người / tổ phụ trách","","full")}
+        </div>
+      </div>
+      <div class="card">
+        <h2>Link <span class="n">để trống → dùng link chung trong Cài đặt</span></h2>
+        <div class="fields">
+          ${F("hubUrl","Link trang hồ sơ – đích của QR (phương án A/C)","https://…sharepoint.com/sites/…/SU-01.aspx","full")}
+          ${F("docUrl","Thư mục tài liệu PDF (Drive / SharePoint)","https://drive.google.com/drive/folders/…","full")}
+          ${F("formUrl","Link báo lỗi riêng","https://…")}
+          ${F("faultUrl","Sổ theo dõi bất thường riêng","https://…")}
+          ${F("histUrl","Lịch sử bảo dưỡng riêng","https://…")}
+          ${F("planUrl","Kế hoạch BD định kỳ riêng","https://…")}
+        </div>
+      </div>
+      <div class="card">
+        <h2>Thông số kỹ thuật</h2>
+        <div class="rows" id="specRows"></div>
+        <div class="stack" style="grid-template-columns:repeat(auto-fit,minmax(150px,max-content))"><button class="btn sm" id="addSpec">+ Thêm thông số</button><button class="btn sm" id="specTpl">Chèn bộ thông số gợi ý</button></div>
+      </div>
+      <div class="card">
+        <h2>Tài liệu PDF <span class="n">hiện riêng từng file trên trang hồ sơ</span></h2>
+        <div class="rows" id="docRows"></div>
+        <div class="stack" style="grid-template-columns:max-content"><button class="btn sm" id="addDoc">+ Thêm tài liệu</button></div>
+        <p class="hint">Google Drive: chuột phải file → Chia sẻ → Sao chép đường liên kết.</p>
+      </div>
+      <div class="card">
+        <h2>Lỗi thường gặp & cách xử lý nhanh</h2>
+        <div class="rows" id="faultRows"></div>
+        <div class="stack" style="grid-template-columns:max-content"><button class="btn sm" id="addFault">+ Thêm lỗi</button></div>
+        <p class="hint">Chỉ đưa lỗi đã lặp lại và có cách xử lý chuẩn. Toàn bộ lịch sử chi tiết vẫn nằm trong Excel.</p>
+      </div>
+      <div class="card">
+        <h2>Lưu ý an toàn / khuyến cáo nổi bật</h2>
+        <div class="f full"><textarea data-k="warning" placeholder="VD: Cô lập nguồn và treo biển trước khi vào khu vực gầu ngoạm…">${esc(e.warning)}</textarea></div>
+      </div>
+      <div class="card">
+        <h2>Vật tư dự phòng liên quan <span class="n" id="eqVtN">—</span></h2>
+        <div class="f full"><label>Từ khóa vật tư bổ sung <em>(cách nhau dấu phẩy; tìm trong cột Hệ thống / Hệ thống 2 / tên vật tư)</em></label><input data-k="vtKey" value="${esc(e.vtKey||"")}" placeholder="VD: tripper, cánh lật 81"></div>
+        <div id="eqVt" class="vtlist" style="margin-top:10px"></div>
+      </div>
+      <div class="stack" style="grid-template-columns:repeat(auto-fit,minmax(150px,max-content));margin-top:18px">
+        <button class="btn" id="dupEq">Nhân bản thiết bị</button>
+        <button class="btn danger" id="delEq">Xóa thiết bị</button>
+      </div>
+    </div>
+    <aside class="card qrbox">
+      <h2 style="justify-content:center">Mã QR · ${esc(e.code)}</h2>
+      <div id="qrPrev"></div>
+      <div class="stack">
+        <button class="btn primary" id="prevHub">Xem trang hồ sơ</button>
+        <button class="btn" id="dlPng">Tải tem PNG</button>
+        <button class="btn" id="dlSvg">Tải QR SVG (in khổ lớn)</button>
+        <button class="btn" id="cpUrl">Sao chép link</button>
+      </div>
+    </aside>
+  </div>`;
+  $$("[data-k]", box).forEach(inp => inp.oninput = () => {
+    const k = inp.dataset.k;
+    if (k==="code"){ const v=inp.value.trim().toUpperCase(); if (DB.equipment.some((x,i)=>i!==cur && x.code===v)) { inp.style.borderColor="var(--danger)"; return; } inp.style.borderColor=""; e.code=v; }
+    else e[k] = inp.value;
+    save(); renderQR(); if (["code","name","area","hubUrl"].includes(k)) renderList(); if (k==="vtKey"||k==="code") { VTMAP=null; renderEqVt(); }
+  });
+  rowsUI("specRows", e.specs, [{k:"k",ph:"Thông số (VD: Năng suất định mức)"},{k:"v",ph:"Giá trị (VD: … t/h)"}]);
+  rowsUI("docRows", e.docs, [{k:"name",ph:"Tên tài liệu"},{k:"url",ph:"Link PDF https://…"}]);
+  rowsUI("faultRows", e.faults, [{k:"sym",ph:"Hiện tượng / mã alarm"},{k:"fix",ph:"Nguyên nhân & cách xử lý",ta:true}], "fault");
+  $("#addSpec").onclick = () => { e.specs.push({k:"",v:""}); save(); renderEdit(); };
+  $("#specTpl").onclick = () => { ["Năng suất định mức","Công suất động cơ chính","Điện áp cấp","Tốc độ","Khối lượng","Hệ điều khiển / PLC","Dầu hộp số","Mỡ bôi trơn"].forEach(k=>{ if(!e.specs.some(s=>s.k===k)) e.specs.push({k,v:""}); }); save(); renderEdit(); };
+  $("#addDoc").onclick = () => { e.docs.push({name:"",url:""}); save(); renderEdit(); };
+  $("#addFault").onclick = () => { e.faults.push({sym:"",fix:""}); save(); renderEdit(); };
+  $("#delEq").onclick = () => { if(confirm(`Xóa thiết bị ${e.code}?`)){ DB.equipment.splice(cur,1); cur=Math.max(0,cur-1); save(); renderAll(); } };
+  $("#dupEq").onclick = () => { const c = JSON.parse(JSON.stringify(e)); c.code = e.code+"-COPY"; DB.equipment.splice(cur+1,0,c); cur++; save(); renderAll(); };
+  $("#prevHub").onclick = () => renderHub(e.code, true);
+  $("#dlSvg").onclick = () => { const u=targetUrl(e); if(!u) return toast("Chưa có đích QR"); download(`QR_${e.code}.svg`, qrSvg(u), "image/svg+xml"); };
+  $("#dlPng").onclick = () => labelPng(e);
+  $("#cpUrl").onclick = () => { const u=targetUrl(e); if(!u) return toast("Chưa có đích QR"); (navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(()=>toast("Đã sao chép link")).catch(()=>prompt("Sao chép link:",u)); };
+  renderQR(); renderEqVt();
+}
+function rowsUI(id, arr, defs, cls=""){
+  const host = $("#"+id);
+  host.innerHTML = arr.map((r,i)=>`<div class="row ${cls}">${defs.map(d=> d.ta ? `<textarea data-f="${d.k}" data-i="${i}" placeholder="${esc(d.ph)}">${esc(r[d.k])}</textarea>` : `<input data-f="${d.k}" data-i="${i}" value="${esc(r[d.k])}" placeholder="${esc(d.ph)}">`).join("")}<button class="x" data-del="${i}" title="Xóa dòng">×</button></div>`).join("");
+  $$("[data-f]",host).forEach(inp => inp.oninput = () => { arr[+inp.dataset.i][inp.dataset.f] = inp.value; save(); });
+  $$("[data-del]",host).forEach(b => b.onclick = () => { arr.splice(+b.dataset.del,1); save(); renderEdit(); });
+}
+function renderQR(){
+  const e = DB.equipment[cur], u = targetUrl(e), box = $("#qrPrev"); if(!box) return;
+  if (!u){ box.innerHTML = `<p class="pill warn">Chưa có đích QR</p><p class="hint">Dán link thư mục tài liệu (Google Drive / SharePoint) của thiết bị này vào ô “Thư mục tài liệu PDF”, hoặc dán cả danh sách bằng nút “Dán danh mục từ Excel”.</p>`; return; }
+  let info; try { info = qrInfo(u); } catch(err){ box.innerHTML = `<p class="pill bad">Link quá dài để tạo QR</p>`; return; }
+  const lvl = info.modules <= 41 ? ["ok","Dễ quét"] : info.modules <= 57 ? ["warn","Mã hơi dày – in ≥ 30 mm"] : ["bad","Mã quá dày – nên rút gọn link"];
+  box.innerHTML = `<div class="qr">${qrSvg(u)}</div><div style="margin-top:8px;font-size:12.5px;font-weight:600;color:var(--navy)">Đích: ${esc(target(e).kind)}</div><div style="margin-top:6px"><span class="pill ${lvl[0]}">${lvl[1]}</span></div><div class="qrurl">${esc(u)}<br><span style="color:#8798aa">${info.len} ký tự · ${info.modules}×${info.modules} ô</span></div>`;
+}
+
+/* ---------- labels ---------- */
+let picked = null;
+function renderLabelsTab(){
+  if (!picked) picked = new Set(DB.equipment.map(e=>e.code));
+  $("#lblChecks").innerHTML = DB.equipment.map(e=>`<label class="chk"><input type="checkbox" value="${esc(e.code)}" ${picked.has(e.code)?"checked":""}>${esc(e.code)}</label>`).join("");
+  $$("#lblChecks input").forEach(c => c.onchange = () => { c.checked ? picked.add(c.value) : picked.delete(c.value); renderLabels(); });
+  renderLabels();
+}
+function renderLabels(){
+  picked = new Set($$("#lblChecks input").filter(c=>c.checked).map(c=>c.value));
+  const [w,h] = $("#lblSize").value.split("x");
+  const sheet = $("#sheet"); sheet.style.setProperty("--lw", w+"mm"); sheet.style.setProperty("--lh", h+"mm");
+  const list = DB.equipment.filter(e=>picked.has(e.code));
+  const missing = list.filter(e=>!targetUrl(e)).map(e=>e.code);
+  sheet.innerHTML = list.filter(e=>targetUrl(e)).map(e=>`
+    <div class="label"><div class="lt"><span>${esc(DB.settings.plant)}</span><span>${esc(DB.settings.system)}</span></div>
+      <div class="lb">${qrSvg(targetUrl(e),2)}<div><div class="lc">${esc(e.code)}</div><div class="ln">${esc(e.name)}</div></div></div>
+      <div class="lf">${esc(DB.settings.footer)}</div></div>`).join("")
+    + (missing.length ? `<p class="hint noprint" style="width:100%">Chưa có link thư mục tài liệu, chưa in được: ${missing.map(esc).join(", ")}</p>` : "")
+    || `<p class="hint">Chọn thiết bị để in tem.</p>`;
+}
+function labelPng(e){
+  const u = targetUrl(e); if(!u) return toast("Chưa có đích QR");
+  const S = 12, W = 70*S, H = 45*S, c = document.createElement("canvas"); c.width=W; c.height=H;
+  const g = c.getContext("2d"), font = '"Sora","Be Vietnam Pro",system-ui,sans-serif';
+  g.fillStyle="#fff"; g.fillRect(0,0,W,H);
+  const hb = H*.13, fb = H*.11;
+  g.fillStyle="#0A2A4A"; g.fillRect(0,0,W,hb); g.fillStyle="#00B050"; g.fillRect(0,H-fb,W,fb);
+  g.fillStyle="#fff"; g.font=`700 ${hb*.46}px ${font}`; g.textBaseline="middle"; g.fillText(DB.settings.plant.toUpperCase(), S*3, hb/2);
+  g.textAlign="right"; g.fillStyle="#7fd3a0"; g.fillText(DB.settings.system.toUpperCase(), W-S*3, hb/2); g.textAlign="left";
+  g.fillStyle="#fff"; g.font=`600 ${fb*.45}px ${font}`; g.textAlign="center"; g.fillText(DB.settings.footer, W/2, H-fb/2); g.textAlign="left";
+  const q = qrMake(u), n = q.getModuleCount(), qs = H - hb - fb - S*4, cell = Math.floor(qs/(n+4)), qx = S*3, qy = hb + (H-hb-fb - cell*(n+4))/2;
+  g.fillStyle="#fff"; g.fillRect(qx,qy,cell*(n+4),cell*(n+4)); g.fillStyle="#0A2A4A";
+  for(let r=0;r<n;r++) for(let k=0;k<n;k++) if(q.isDark(r,k)) g.fillRect(qx+(k+2)*cell, qy+(r+2)*cell, cell, cell);
+  const tx = qx + cell*(n+4) + S*3, tw = W - tx - S*3;
+  g.fillStyle="#0083C7"; g.font=`800 ${H*.15}px ${font}`; g.textBaseline="top"; g.fillText(e.code, tx, hb + S*5, tw);
+  g.fillStyle="#0A2A4A"; g.font=`600 ${H*.066}px ${font}`;
+  const words = e.name.split(/\s+/); let line="", y = hb + S*5 + H*.2, lines=0;
+  for (const w of words){ const t = line? line+" "+w : w; if (g.measureText(t).width > tw && line){ g.fillText(line, tx, y); y += H*.085; line = w; if(++lines===3) break; } else line = t; }
+  if (lines<3 && line) g.fillText(line, tx, y);
+  g.strokeStyle="#0A2A4A"; g.lineWidth=S*.3; g.strokeRect(g.lineWidth/2,g.lineWidth/2,W-g.lineWidth,H-g.lineWidth);
+  c.toBlob(b => downloadBlob(`Tem_QR_${e.code}.png`, b), "image/png");
+}
+
+/* ---------- import / export ---------- */
+function importPaste(){
+  const txt = $("#pasteArea").value.trim(); if(!txt) return;
+  let add=0, upd=0;
+  txt.split(/\r?\n/).forEach(line => {
+    const c = line.split("\t").map(s=>s.trim()); const code = (c[0]||"").toUpperCase();
+    if (!code || /^mã/i.test(code)) return;
+    let e = DB.equipment.find(x=>x.code===code); if (!e){ e = blankEq(code,""); DB.equipment.push(e); add++; } else upd++;
+    const set = (k,v) => { if (v) e[k]=v; };
+    set("name",c[1]); set("area",c[2]); set("maker",c[3]); set("model",c[4]); set("year",c[5]);
+    if (c[6] && !e.specs.some(s=>s.k==="Thông số chính")) e.specs.unshift({k:"Thông số chính",v:c[6]});
+    set("owner",c[7]); set("docUrl",safeUrl(c[8])); set("hubUrl",safeUrl(c[9]));
+  });
+  save(); picked=null; $("#dlgPaste").close(); $("#pasteArea").value=""; renderAll(); toast(`Thêm ${add}, cập nhật ${upd} thiết bị`);
+}
+async function exportPublic(){
+  const pass = (DB.settings.docPass || "").trim();
+  if (pass.length < 6) { setTab("settings"); toast("Đặt mật khẩu tối thiểu 6 ký tự trước khi xuất"); $('[data-s="docPass"]').focus(); return; }
+  if (!(window.crypto && crypto.subtle)) { toast("Trình duyệt này không hỗ trợ mã hóa – dùng Chrome/Edge"); return; }
+  const secret = {}, pub = JSON.parse(JSON.stringify(DB));
+  pub.equipment.forEach((e, i) => {
+    const src = DB.equipment[i], folder = docFolder(src), docs = (src.docs||[]).filter(d => d.name && safeUrl(d.url));
+    secret[e.code] = {folder, docs, vt: VT ? vtCompact(src) : []};
+    e.hasDocs = !!(folder || docs.length || (VT && vtFor(src).length));
+    e.docUrl = ""; e.docs = []; e.hubUrl = "";
+  });
+  ["docPass","docRoot","docUrl"].forEach(k => delete pub.settings[k]);
+  if (!VT) toast("Chưa nạp dữ liệu vật tư – trang công khai sẽ không có phần vật tư");
+  pub.hasVt = !!VT;
+  pub.locked = await lockData(secret, pass);
+  pub.publicBuild = true; pub.savedAt = Date.now();
+  const json = JSON.stringify(pub).replace(/</g,"\\u003c");
+  const out = ORIGINAL.replace(/(<script id="seed" type="application\/json">)[\s\S]*?(<\/script>)/, (_,a,b)=> a + json + b);
+  download("index.html", out, "text/html");
+  toast("Đã xuất index.html – link tài liệu đã mã hóa");
+}
+function exportHtml(){
+  DB.savedAt = Date.now();
+  const json = JSON.stringify(DB).replace(/</g,"\\u003c");
+  const out = ORIGINAL.replace(/(<script id="seed" type="application\/json">)[\s\S]*?(<\/script>)/, (_,a,b)=> a + json + b);
+  download(`hoso-thietbi-songhau1-${stamp()}.html`, out, "text/html");
+  save(); toast("Đã xuất file HTML kèm dữ liệu mới");
+}
+function stamp(){ const d=new Date(); return d.getFullYear()+String(d.getMonth()+1).padStart(2,"0")+String(d.getDate()).padStart(2,"0"); }
+function download(name, text, type){ downloadBlob(name, new Blob([text],{type:type+";charset=utf-8"})); }
+function downloadBlob(name, blob){ const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href); a.remove();},500); }
+async function startHub(code){
+  if (DB.locked && !UNLOCKED) { const p = recallPass(); if (p) { try { UNLOCKED = await unlockData(DB.locked, p); } catch(_){ forgetPass(); } } }
+  renderHub(code, false);
+}
+function renderDirectory(){
+  const hub = $("#hub"); hub.classList.remove("hidden");
+  hub.innerHTML = `<div class="hero"><div class="org"><span>${esc(DB.settings.plant)}</span><span>${esc(DB.settings.system)}</span></div><div class="code" style="font-size:clamp(26px,7vw,40px)">Hồ sơ thiết bị</div><div class="name">Quét tem QR tại thiết bị hoặc chọn bên dưới</div></div>
+  <div class="hubwrap"><div class="sec"><div class="dir">${DB.equipment.map(e=>`<a href="?tb=${encodeURIComponent(e.code)}"><b>${esc(e.code)}</b><span>${esc(e.name)}</span></a>`).join("")}</div></div></div>`;
+}
+if (hubCode) startHub(hubCode); else if (DB.publicBuild) renderDirectory(); else initAdmin();
+})();
+</script>
+</body>
+</html>
